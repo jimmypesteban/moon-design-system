@@ -7,7 +7,7 @@ import aiGraded from '../assets/icons/ai-graded.svg?raw';
 import answer from '../assets/icons/answer.svg?raw';
 import bot from '../assets/icons/bot.svg?raw';
 import challenge from '../assets/icons/challenge.svg?raw';
-import class from '../assets/icons/class.svg?raw';
+import classIcon from '../assets/icons/class.svg?raw';
 import hard from '../assets/icons/hard.svg?raw';
 import highlight from '../assets/icons/highlight.svg?raw';
 import listening from '../assets/icons/listening.svg?raw';
@@ -29,7 +29,7 @@ export const CUSTOM_ICONS = {
   'answer': answer,
   'bot': bot,
   'challenge': challenge,
-  'class': class,
+  'class': classIcon,
   'hard': hard,
   'highlight': highlight,
   'listening': listening,
