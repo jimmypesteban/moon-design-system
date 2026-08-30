@@ -1,0 +1,72 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+import { TokenTable } from '../../.storybook/TokenTable';
+
+<Meta title="Foundations/Tokens" />
+
+<DesignSystemHeader group="Foundations" title="Tokens">
+  Every named value in the system, in one searchable list — and why they have
+  names at all.
+</DesignSystemHeader>
+
+A token is a name for a decision. `mo-red` instead of `#B82431`, `rounded-mo-sm`
+instead of `border-radius: 12px`. The value lives in one file, and everything
+else refers to it.
+
+The reason to bother is not tidiness. It is that a hex code copied into a
+component is a decision nobody can find again. When the brand red changed, every
+place that said `mo-red` changed with it; every place that said `#B82431` had to
+be hunted down by hand, and the ones that were slightly wrong — `#BB104F`,
+`#BA104E` — were never found at all, because nothing was looking. There are
+still roughly 3,400 raw hex values across this repo for exactly that reason. See
+the [Handoff](/?path=/docs/handoff--docs) page for what remains.
+
+## Where the value actually lives
+
+`tokens.mjs` at the repo root is the single source in code. Tailwind reads it
+through the brand preset, so `bg-mo-red` and `var(--color-mo-red)` resolve to the
+same place. **Nothing here is typed twice** — this page reads that same file, so
+a token added tomorrow appears below without anyone editing this page.
+
+And the code is the top of the chain: changing a value here changes the
+brand. Nothing checks these against an outside reference — the guards only
+verify that code uses a token rather than a literal — so a change here is a
+brand decision, not a refactor.
+
+## Every token
+
+Search by name or by value — `red`, `16px`, `shadow` all work. The "how to use
+it" column is the class you would actually type.
+
+<TokenTable />
+
+## Using them in code
+
+In an app with the brand preset, tokens are ordinary Tailwind classes —
+`bg-mo-red`, `rounded-mo-sm`, `p-mo-md`, `shadow-mo-sm`, `text-mo-body`. Reach
+for the class, not the value.
+
+When you genuinely need the raw value in JavaScript — a canvas, an inline SVG, a
+chart library that will not take a class — import it rather than retyping it:
+
+```js
+import { colors, spacing } from 'mosaic-design-system/tokens.mjs';
+```
+
+Retyping the value is how the drift above started, and it is invisible in
+review: a hex in a diff looks like a colour, not like a decision being copied
+out of the system.
+
+## What has no token yet
+
+Not everything is covered, and pretending otherwise would send someone
+looking for a name that does not exist. One known gap: three semantic names
+(`mo-body-sm`, `mo-subhead`, `mo-cta`) deliberately share 14px, and picking
+the right one per site is a role decision no tool can make for you.
+
+If you need a value that has no token, add it to `tokens.mjs` rather than
+inlining it — even a slightly wrong token is findable later, and an inline hex
+is not.
+
+<DocsFooter />

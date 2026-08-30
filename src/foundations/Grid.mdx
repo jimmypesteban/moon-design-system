@@ -1,0 +1,83 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { container, breakpoints, fontFamily } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+export const BODY_FONT = fontFamily.body.join(', ');
+
+<Meta title="Foundations/Grid" />
+
+<DesignSystemHeader group="Foundations" title="Grid & Container">
+  How wide page content is allowed to get, and how much empty margin sits on
+  either side of it, at every screen size — from a phone's edge-to-edge
+  layout up to a wide desktop monitor where the content stops growing and
+  stays centered.
+</DesignSystemHeader>
+
+export const marginRows = Object.entries(container.margin);
+
+## Container margin by breakpoint
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5' }}>
+      <th style={{ padding: '8px 12px' }}>Breakpoint</th>
+      <th style={{ padding: '8px 12px' }}>Viewport</th>
+      <th style={{ padding: '8px 12px' }}>Side margin</th>
+      <th style={{ padding: '8px 12px' }}>Confirmed?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {marginRows.map(([bp, margin]) => (
+      <tr key={bp} style={{ borderBottom: '1px solid #E8DDD5' }}>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#313030' }}>{bp}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{breakpoints[bp] ?? '< 640px (mobile)'}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{margin}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{bp === 'xl' || bp === '2xl' ? '✅ yes' : 'interpolated'}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Container max-width
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5' }}>
+      <th style={{ padding: '8px 12px' }}>Breakpoint</th>
+      <th style={{ padding: '8px 12px' }}>Max width</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(container.maxWidth).map(([bp, width]) => (
+      <tr key={bp} style={{ borderBottom: '1px solid #E8DDD5' }}>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#313030' }}>{bp}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{width}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Columns
+
+The reference grid layouts use fluid column-count presets (12/6/5/3/2 columns,
+"auto" sizing) rather than fixed pixel column widths — build layouts with
+CSS Grid / Tailwind's `grid-cols-*` utilities directly (`grid grid-cols-12
+gap-6`) rather than a dedicated Column component.
+
+## Implementation notes
+
+Use the `Container` component rather than reproducing these values by hand:
+
+```tsx
+<Container>
+  <PageContent />
+</Container>
+```
+
+From the reference design file's own "Grid layouts" page. Two data points are
+directly confirmed: at a 1440px viewport the container is 1280px wide (80px
+side margin); at 1600px it's 1440px wide (still 80px). Tablet (768px) and
+mobile (375px) go full-bleed — no container margin, just inner padding.
+
+<DocsFooter />

@@ -1,0 +1,140 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { spacing, breakpoints, fontFamily } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+export const BODY_FONT = fontFamily.body.join(', ');
+
+export const SCALE = [
+  1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 56, 64,
+].map((n) => ({ n, rem: n / 4, px: n * 4 }));
+
+export const MO_BY_PX = Object.entries(spacing).reduce((acc, [name, value]) => {
+  acc[parseInt(value, 10)] = name;
+  return acc;
+}, {});
+
+export const CONTAINERS = Object.entries(breakpoints).map(([name, value]) => ({
+  name,
+  px: parseInt(value, 10),
+  rem: parseInt(value, 10) / 16,
+}));
+
+export const MAX_CONTAINER = Math.max(...CONTAINERS.map((c) => c.px));
+
+<Meta title="Foundations/Spacing" />
+
+<DesignSystemHeader group="Foundations" title="Spacing">
+  How much empty space to leave between things — from a tiny gap between an
+  icon and its label, up to the wide margin around a whole page. Every value
+  below is on the same consistent grid, so spacing never looks arbitrary from
+  one screen to the next.
+</DesignSystemHeader>
+
+## Spacing scale
+
+Every step is `n × 0.25rem`, so the number in the utility *is* the step: `p-4`
+is 4 × 4px = 16px. Rows marked with a token are the brand checkpoints — they
+are semantic aliases on this same grid, never a separate scale.
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5', color: '#6B6A66', fontSize: 13, fontWeight: 500 }}>
+      <th style={{ padding: '8px 12px', width: 80 }}>Name</th>
+      <th style={{ padding: '8px 12px', width: 150 }}>Size (16px base)</th>
+      <th style={{ padding: '8px 12px', width: 100 }}>Pixels</th>
+      <th style={{ padding: '8px 12px', width: 130 }}>Token</th>
+      <th style={{ padding: '8px 12px' }}></th>
+    </tr>
+  </thead>
+  <tbody>
+    {SCALE.map((row) => (
+      <tr key={row.n} style={{ borderBottom: '1px solid #F3EDE7' }}>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#313030' }}>{row.n}</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{row.rem}rem</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{row.px}px</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#B82431' }}>{MO_BY_PX[row.px] || ''}</td>
+        <td style={{ padding: '6px 12px' }}>
+          <div style={{ background: '#FBE4EC', height: 18, width: row.px, borderRadius: 2, display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: 10, color: '#B82431', paddingLeft: 4, whiteSpace: 'nowrap' }}>{row.px}px</span>
+          </div>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<div style={{ marginTop: 20, padding: '12px 16px', border: '1px solid #E8DDD5', borderRadius: 8, fontFamily: BODY_FONT, fontSize: 13, color: '#6B6A66' }}>
+  <strong style={{ color: '#313030' }}>mo-margin sits off this table.</strong> At
+  100px it is step 25, and the scale above jumps 24 → 32. Tailwind v4 computes
+  any integer, so <code>p-25</code> is valid and renders 100px — but it is the one
+  brand checkpoint with no listed step, so expect it to look like an outlier next
+  to the others.
+</div>
+
+## Containers
+
+Maximum content widths. These are the same values as the responsive
+breakpoints, so a container and the breakpoint that triggers it never disagree.
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5', color: '#6B6A66', fontSize: 13, fontWeight: 500 }}>
+      <th style={{ padding: '8px 12px', width: 80 }}>Name</th>
+      <th style={{ padding: '8px 12px', width: 150 }}>Size (16px base)</th>
+      <th style={{ padding: '8px 12px', width: 100 }}>Pixels</th>
+      <th style={{ padding: '8px 12px' }}></th>
+    </tr>
+  </thead>
+  <tbody>
+    {CONTAINERS.map((row) => (
+      <tr key={row.name} style={{ borderBottom: '1px solid #F3EDE7' }}>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#313030' }}>{row.name}</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{row.rem}rem</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{row.px.toLocaleString()}px</td>
+        <td style={{ padding: '6px 12px' }}>
+          <div style={{ background: '#FBE4EC', height: 18, width: `${(row.px / MAX_CONTAINER) * 100}%`, borderRadius: 2, display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: 10, color: '#B82431', paddingLeft: 4, whiteSpace: 'nowrap' }}>{row.px.toLocaleString()}px</span>
+          </div>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Usage
+
+- **`mo-xs` – `mo-lg`** (4–24px): component-internal spacing — padding inside a
+  `Card`, gaps between form fields, icon-to-label gaps
+- **`mo-xl`** (48px): spacing between distinct sections on a page
+- **`mo-margin`** (100px): the brand's minimum outer page margin — a much
+  larger value than the rest of the scale, meant for page gutters on wide
+  layouts, not component-internal spacing
+
+### Example
+
+<div className="flex gap-mo-sm">
+  <div className="p-mo-lg bg-mo-white border border-mo-black/10 rounded-[8px] text-sm">
+    p-mo-lg
+  </div>
+  <div className="p-mo-md bg-mo-white border border-mo-black/10 rounded-[8px] text-sm">
+    p-mo-md
+  </div>
+</div>
+
+## Implementation notes
+
+Mosaic UI spacing follows a strict **4-point grid** — every value is a
+multiple of 4px. That's not a coincidence: it's exactly Tailwind's own
+default numeric spacing scale (`p-1`, `p-2`, `p-3`...), where each step is
+already `n × 4px`. So for general spacing, **prefer Tailwind's plain numeric
+utilities** (`p-4`, `gap-6`, `m-12`) — they're already on-grid. The named
+`mo-*` tokens exist for the handful of specific checkpoints the brand calls
+out, as semantic aliases on that same grid, not a separate scale. Avoid
+half-step utilities like `p-1.5`/`p-2.5` (6px/10px) — they break the grid.
+
+Both tables derive from `tokens.mjs`: the Token column is matched by pixel
+value against `spacing`, and Containers is generated from `breakpoints`. Add a
+token there and it appears here without editing this page.
+
+<DocsFooter />

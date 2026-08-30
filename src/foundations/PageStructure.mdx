@@ -1,0 +1,184 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { PageStructure } from './PageStructure';
+import { borderRadius, colors } from '../../tokens.mjs';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+<Meta title="Foundations/Page Structure" />
+
+<DesignSystemHeader group="Foundations" title="Page Structure">
+  Which part of a page is the menu, which is the real content, and which is the
+  sidebar — marked so that software can tell them apart, not just a person
+  looking at the screen. It is what lets a student who navigates by keyboard or
+  screen reader jump straight to their lesson instead of tabbing past the menu
+  on every single page, and what lets Google or an AI assistant tell a page's
+  substance from its furniture.
+</DesignSystemHeader>
+
+Hover or click any part below — the wireframe, the list, and the markup are the
+same page at three levels of detail, and they highlight together.
+
+<PageStructure />
+
+## If you don't write the code
+
+Most of this page is about which tag to use, which is a developer's job. But
+the three largest gaps we measured are **not** waiting on a developer — they are
+waiting on a design or copy decision, and they are the reason the numbers above
+look the way they do.
+
+<div style={{ display: 'grid', gap: 10, marginTop: 16, marginBottom: 24 }}>
+  {[
+    {
+      q: 'Does this area have a visible heading?',
+      n: '448 regions',
+      a: 'A grouped area is only announced to a screen reader if something gives it a name, and that name is meant to come from a heading already on screen. Where a design groups things visually but labels nothing, there is no name to borrow — so the group exists for sighted users and disappears for everyone else.',
+    },
+    {
+      q: 'Is this a real button, or just something that happens to be clickable?',
+      n: '145 places',
+      a: 'These can be clicked with a mouse but cannot be reached by keyboard at all, and a screen reader never announces them as something you can do. If it is meant to be an action, it needs to look and behave like one.',
+    },
+    {
+      q: 'What is this table called?',
+      n: '92 of 93 tables',
+      a: 'A table needs a short title to be announced as anything more specific than "table". This is a one-line piece of copy per table, and almost none of ours have it.',
+    },
+  ].map((r) => (
+    <div key={r.q} style={{ border: `1px solid ${colors['mo-grey'][3]}`, borderRadius: borderRadius['mo-sm'], padding: '14px 16px', background: colors['mo-grey'][1] }}>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', flexWrap: 'wrap' }}>
+        <strong style={{ color: colors['mo-black'], fontSize: 14 }}>{r.q}</strong>
+        <span style={{ fontSize: 11, fontWeight: 700, color: colors['mo-red'][8], background: colors['mo-red'][1], padding: '2px 8px', borderRadius: borderRadius['mo-full'], whiteSpace: 'nowrap' }}>
+          {r.n}
+        </span>
+      </div>
+      <div style={{ marginTop: 6, fontSize: 13, color: colors['mo-grey'].DEFAULT, lineHeight: 1.6 }}>{r.a}</div>
+    </div>
+  ))}
+</div>
+
+Everything below this point is written for whoever is building the page.
+
+## Read this as "what do I already get"
+
+The list above names the component behind each landmark, because the
+useful question is rarely *what does `<nav>` mean*. It is **do I get one
+already, or do I have to write it** — and mostly you do:
+
+- **`AppLayout`** renders the `<main id="main-content">`. There should be
+  exactly one `<main>` on a page, so if you are using `AppLayout` you already
+  have it, and adding another is a bug rather than an improvement.
+- **`TopNav`, `Breadcrumb`, `Pagination` and `StepperNav`** each render a
+  `<nav>`. Several can legitimately appear on the same page.
+- Everything else — `<header>`, `<section>`, `<article>`, `<aside>`,
+  `<footer>` — you write yourself.
+
+## Two rules that are easy to get wrong
+
+**More than one `<nav>` needs labels.** A screen reader lists landmarks by
+role, so three unlabelled navigations are announced as "navigation,
+navigation, navigation". Each of ours carries an `aria-label` —
+`"Breadcrumb"`, `"Pagination"`, `"Wizard steps"`, `"Main"` — which is what
+turns that list into something usable. If you hand-roll a `<nav>`, label it.
+
+**`<section>` is mostly not a landmark at all, and that surprised us.** A
+`<section>` is exposed as a `region` landmark *only* when it carries an
+accessible name — `aria-label` or `aria-labelledby`. Without one it is a
+generic container, indistinguishable from a `<div>` to assistive tech. Same
+rule for `<form>`. And `<article>` is `role="article"`, which is not a
+landmark in the first place.
+
+Counting tags therefore overstates our coverage by roughly **three times**. Of
+419 `<section>` and 49 `<form>` elements across `apps/`, **twenty carry a
+name** — so 448 of them are structure in the source and nothing in the
+accessibility tree. The real figure is **234 landmarks**, not the 654 a grep
+reports.
+
+The fix is one attribute where the region is genuinely a themed area
+(`<section aria-labelledby="…">` pointing at its heading), and `<div>`
+everywhere else. Reaching for `<section>` because it feels more semantic than
+`<div>` buys a screen-reader user nothing at all.
+
+## Beyond landmarks
+
+Landmarks are only the outermost layer. Four other families carry meaning
+*inside* a page, and counting them across `apps/` shows where we are fine and
+where we are not. These are not regions, which is why they are a table here
+rather than parts of the wireframe above — they live *inside* a landmark.
+
+export const FAMILIES = [
+  {
+    name: 'Buttons',
+    stand: '2,611 <button> — but 145 clickable <div>s with no role, tabIndex or onKeyDown',
+    rule: 'If it does something on click it must be a <button>. A <div onClick> cannot be tabbed to or fired with a keyboard, and a screen reader never announces it. Some of the 145 are legitimate click-outside backdrops; most are not.',
+    bad: true,
+  },
+  {
+    name: 'Tables',
+    stand: '93 <table>, 437 <th> — and 1 <caption>',
+    rule: '<th> is being used well. <caption> is what gives a table its accessible name, so 92 of our tables are announced only as "table".',
+    bad: true,
+  },
+  {
+    name: 'Dates',
+    stand: '2 <time>, in a product built on deadlines',
+    rule: '<time dateTime="…"> makes a date machine-readable. "Due Friday" means nothing to a crawler or an assistant without it.',
+    bad: true,
+  },
+  {
+    name: 'Lists',
+    stand: '177 <ul>, 44 <ol>, 278 <li>, 25 <dl>',
+    rule: 'Healthy. A screen reader announces "list, 6 items", which a stack of <div>s never does.',
+    bad: false,
+  },
+  {
+    name: 'Headings',
+    stand: '248 h1, 446 h2, 262 h3, 69 h4',
+    rule: 'Pick a level for its depth, not its size, and style it with the type tokens. A skipped level breaks the outline a screen-reader user navigates by.',
+    bad: false,
+  },
+];
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontSize: 13 }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: `1px solid ${colors['mo-grey'][3]}`, color: colors['mo-grey'].DEFAULT, fontWeight: 500 }}>
+      <th style={{ padding: '8px 12px', width: 96 }}>Family</th>
+      <th style={{ padding: '8px 12px', width: 280 }}>Where we stand</th>
+      <th style={{ padding: '8px 12px' }}>The rule</th>
+    </tr>
+  </thead>
+  <tbody>
+    {FAMILIES.map((f) => (
+      <tr key={f.name} style={{ borderBottom: `1px solid ${colors['mo-grey'][2]}`, verticalAlign: 'top' }}>
+        <td style={{ padding: '10px 12px', fontWeight: 600, color: colors['mo-black'] }}>{f.name}</td>
+        <td style={{ padding: '10px 12px', color: f.bad ? colors['mo-red'][8] : colors['mo-forest'].DEFAULT, fontFamily: 'ui-monospace, monospace', fontSize: 11.5, lineHeight: 1.5 }}>
+          {f.stand}
+        </td>
+        <td style={{ padding: '10px 12px', color: colors['mo-grey'].DEFAULT, lineHeight: 1.5 }}>{f.rule}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+One that looks like a gap and is not: **`<dialog>` is used 0 times**, because
+`Modal` implements `role="dialog"` with `aria-modal` and its own focus trap
+instead. That is a deliberate choice — the native element's focus and
+backdrop behaviour is still awkward across browsers — not an oversight.
+
+**`<search>` is also 0**, and that one is simply unused: it is the newer
+element for a search region, and `role="search"` on a named `<form>` does the
+same job in browsers that do not know it yet.
+
+## Why bother
+
+A landmark is not decoration; four different consumers read it.
+
+- **Screen readers** build a landmark list, which is how a keyboard user skips
+  the nav on every single page instead of tabbing through it.
+- **Search engines** weigh content inside `<main>`/`<article>` differently from
+  chrome inside `<header>`/`<footer>`.
+- **AI crawlers and readers** use the same signals to decide what a page is
+  actually about, which increasingly decides how it gets summarised.
+- **The next developer** reads structure faster than they read class names.
+
+<DocsFooter />

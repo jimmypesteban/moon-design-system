@@ -1,0 +1,191 @@
+{
+  "foundations-logo--color-variants": [
+    "surface same colour as what is behind it — div #F5F4F0"
+  ],
+  "foundations-logo--all-brand-colors": [
+    "surface same colour as what is behind it — div #F5F4F0"
+  ],
+  "components-display-audioplayer--default": [
+    "contrast below 4.5:1 — \"Failed to load audio\""
+  ],
+  "components-display-audioplayer--blue-admin-theme": [
+    "contrast below 4.5:1 — \"Failed to load audio\""
+  ],
+  "components-display-audioplayer--with-transcript": [
+    "contrast below 4.5:1 — \"Failed to load audio\""
+  ],
+  "components-display-audioplayer--inside-sidebar-column": [
+    "contrast below 4.5:1 — \"Failed to load audio\""
+  ],
+  "components-display-audioplayer--very-narrow": [
+    "contrast below 4.5:1 — \"Failed to load audio\""
+  ],
+  "components-navigation-breadcrumb--default": [
+    "contrast below 4.5:1 — \"Student Roster\""
+  ],
+  "components-navigation-breadcrumb--two-levels": [
+    "contrast below 4.5:1 — \"Current Page\""
+  ],
+  "components-actions-button--all-variants": [
+    "contrast below 4.5:1 — \"secondary\"",
+    "contrast below 4.5:1 — \"tertiary\""
+  ],
+  "components-display-card--with-footer": [
+    "contrast below 4.5:1 — \"Cancel\""
+  ],
+  "components-forms-datepicker--default": [
+    "contrast below 4.5:1 — \"Select date\""
+  ],
+  "components-forms-datepicker--min-max-range": [
+    "contrast below 4.5:1 — \"Next 14 days only\"",
+    "contrast below 4.5:1 — \"Select date\""
+  ],
+  "components-forms-datepicker--with-error": [
+    "contrast below 4.5:1 — \"Select date\""
+  ],
+  "components-forms-datepicker--student-audience": [
+    "contrast below 4.5:1 — \"Select date\""
+  ],
+  "components-forms-datepicker--disabled": [
+    "contrast below 4.5:1 — \"Select date\""
+  ],
+  "components-forms-datetimefield--with-helper-text": [
+    "contrast below 4.5:1 — \"Students lose access aft\""
+  ],
+  "components-navigation-dropdown--default": [
+    "contrast below 4.5:1 — \"Actions\""
+  ],
+  "components-navigation-dropdown--with-disabled-item": [
+    "contrast below 4.5:1 — \"Row actions\""
+  ],
+  "components-navigation-dropdown--right-aligned": [
+    "contrast below 4.5:1 — \"Aligned right\""
+  ],
+  "components-feedback-emptystate--with-action": [
+    "contrast below 4.5:1 — \"Create a class\""
+  ],
+  "components-forms-filedropzone--interactive": [
+    "contrast below 4.5:1 — \"PDF, DOCX, or TXT\""
+  ],
+  "components-forms-input--with-helper-text": [
+    "contrast below 4.5:1 — \"Shown to students on the\""
+  ],
+  "components-display-kbd--default": [
+    "contrast below 4.5:1 — \"↵\""
+  ],
+  "components-display-kbd--inline-hint": [
+    "contrast below 4.5:1 — \"Tab\"",
+    "contrast below 4.5:1 — \"↑\"",
+    "contrast below 4.5:1 — \"→\"",
+    "contrast below 4.5:1 — \"↓\"",
+    "contrast below 4.5:1 — \"↵\""
+  ],
+  "components-navigation-pagination--default": [
+    "contrast below 4.5:1 — \"…\""
+  ],
+  "components-navigation-pagination--first-page": [
+    "contrast below 4.5:1 — \"…\""
+  ],
+  "components-navigation-pagination--last-page": [
+    "contrast below 4.5:1 — \"…\""
+  ],
+  "components-navigation-pagination--with-summary-and-page-size": [
+    "contrast below 4.5:1 — \"1–25 of 241 classes\"",
+    "contrast below 4.5:1 — \"Per page\"",
+    "contrast below 4.5:1 — \"…\""
+  ],
+  "components-overlays-popover--default": [
+    "contrast below 4.5:1 — \"Actions\""
+  ],
+  "components-overlays-popover--aligned-end": [
+    "contrast below 4.5:1 — \"Filter\""
+  ],
+  "components-feedback-progressbar--with-right-label": [
+    "contrast below 4.5:1 — \"40%\""
+  ],
+  "components-feedback-progressbar--with-floating-label": [
+    "contrast below 4.5:1 — \"75%\""
+  ],
+  "components-feedback-progressbar--all-sizes": [
+    "contrast below 4.5:1 — \"30%\"",
+    "contrast below 4.5:1 — \"70%\""
+  ],
+  "components-forms-slider--default": [
+    "contrast below 4.5:1 — \"40\""
+  ],
+  "components-forms-slider--custom-range": [
+    "contrast below 4.5:1 — \"1\""
+  ],
+  "components-forms-slider--disabled": [
+    "contrast below 4.5:1 — \"60\""
+  ],
+  "components-navigation-steppernav--interactive": [
+    "contrast below 4.5:1 — \"Back\""
+  ],
+  "components-navigation-steps--default": [
+    "contrast below 4.5:1 — \"2\"",
+    "contrast below 4.5:1 — \"3\"",
+    "contrast below 4.5:1 — \"Confirm\""
+  ],
+  "components-navigation-steps--first-step": [
+    "contrast below 4.5:1 — \"1\"",
+    "contrast below 4.5:1 — \"2\"",
+    "contrast below 4.5:1 — \"3\"",
+    "contrast below 4.5:1 — \"Confirm\"",
+    "contrast below 4.5:1 — \"Profile\""
+  ],
+  "components-navigation-steps--last-step": [
+    "contrast below 4.5:1 — \"3\""
+  ],
+  "components-navigation-steps--with-descriptions": [
+    "contrast below 4.5:1 — \"2\"",
+    "contrast below 4.5:1 — \"3\"",
+    "contrast below 4.5:1 — \"This is a description.\"",
+    "contrast below 4.5:1 — \"Waiting\""
+  ],
+  "components-forms-switch--default": [
+    "contrast below 4.5:1 — \"Save my login details fo\""
+  ],
+  "components-navigation-tabs--default": [
+    "contrast below 4.5:1 — \"Overview\"",
+    "contrast below 4.5:1 — \"Reports\"",
+    "contrast below 4.5:1 — \"Roster\""
+  ],
+  "components-display-tag--default": [
+    "contrast below 4.5:1 — \"Mathematics\""
+  ],
+  "components-display-tag--all-colors-fill": [
+    "contrast below 4.5:1 — \"blue\"",
+    "contrast below 4.5:1 — \"orange\"",
+    "contrast below 4.5:1 — \"pink\""
+  ],
+  "components-display-tag--all-variants": [
+    "contrast below 4.5:1 — \"fill\"",
+    "contrast below 4.5:1 — \"fill-reverse\"",
+    "contrast below 4.5:1 — \"outline\""
+  ],
+  "components-forms-textarea--with-helper-text": [
+    "contrast below 4.5:1 — \"Max 500 characters\""
+  ],
+  "components-forms-timepicker--default": [
+    "contrast below 4.5:1 — \"Select time\""
+  ],
+  "components-forms-timepicker--with-error": [
+    "contrast below 4.5:1 — \"Select time\""
+  ],
+  "components-forms-timepicker--student-audience": [
+    "contrast below 4.5:1 — \"Select time\""
+  ],
+  "components-forms-timepicker--disabled": [
+    "contrast below 4.5:1 — \"Select time\""
+  ],
+  "components-navigation-topnav--logged-in": [
+    "contrast below 4.5:1 — \"Logout\""
+  ],
+  "components-navigation-topnav--logged-in-no-name": [
+    "contrast below 4.5:1 — \"Logout\""
+  ],
+  "layouts-applayout--default": [
+    "contrast below 4.5:1 — \"Logout\""
+  ]
+}

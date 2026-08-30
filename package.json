@@ -1,0 +1,57 @@
+{
+  "name": "mosaic-design-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./components": "./src/components/index.ts",
+    "./assets/*": "./assets/*",
+    "./tailwind-preset": {
+      "require": "./tailwind-preset.cjs",
+      "default": "./tailwind-preset.mjs"
+    },
+    "./tokens": "./tokens.mjs",
+    "./tokens.mjs": "./tokens.mjs"
+  },
+  "scripts": {
+    "build:chat-download": "esbuild .storybook/svgDownload.ts --bundle --format=iife --global-name=MoSvgDownload --outfile=.storybook/public/mo-svg-download.js --log-level=warning",
+    "prestorybook": "npm run build:chat-download",
+    "prebuild-storybook": "npm run build:chat-download",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test:width-sweep": "node scripts/width-sweep.mjs",
+    "test:docs": "node scripts/docs-sweep.mjs"
+  },
+  "peerDependencies": {
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.5.6",
+    "@storybook/addon-docs": "^10.5.6",
+    "@storybook/icons": "^2.1.0",
+    "@storybook/react-vite": "^10.5.6",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "playwright": "^1.59.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "storybook": "^10.5.6",
+    "tailwindcss": "^4.2.4",
+    "typescript": "~6.0.3"
+  },
+  "dependencies": {
+    "cmdk": "^1.1.1",
+    "jszip": "^3.10.1",
+    "lucide-react": "^1.8.0"
+  },
+  "optionalDependencies": {
+    "@rolldown/binding-darwin-arm64": "1.0.0-rc.15",
+    "@rolldown/binding-linux-x64-gnu": "1.0.0-rc.15"
+  }
+}

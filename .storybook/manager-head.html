@@ -1,0 +1,637 @@
+<!-- The brand mark as the favicon. Storybook ships its own (a pink #FF4785
+     Storybook logo), so without this the browser tab advertises Storybook
+     rather than Mosaic — the single most visible unbranded surface here. The
+     guidelines are explicit that the mark is what stands in when the wordmark
+     cannot be used, "for example as a favicon, app icon" (2.2 Brand Mark).
+     Served under its own name rather than favicon.svg: Storybook ships a
+     favicon.svg of its own and wins that collision, so the staticDir copy
+     never reached the browser. A distinct filename sidesteps the fight. -->
+<link rel="icon" type="image/svg+xml" href="/mosaic-favicon.svg" />
+
+<!-- The tab reads "… ⋅ Storybook" by default, which is the same problem as the
+     favicon one layer up: the tool's name where the brand's belongs. Storybook
+     v10 exposes no documented title API, so this rewrites the suffix instead.
+     Deliberately narrow: it only swaps the trailing "⋅ Storybook" and leaves
+     the story path alone, so if a future version changes the format the title
+     is simply left as Storybook wrote it rather than mangled. Watched with a
+     MutationObserver because Storybook resets the title on every navigation. -->
+<script>
+  (function () {
+    var SUFFIX = / ⋅ Storybook$/;
+    var BRAND = ' ⋅ Mosaic Design System';
+    function brandTitle() {
+      if (SUFFIX.test(document.title)) {
+        document.title = document.title.replace(SUFFIX, BRAND);
+      }
+    }
+    brandTitle();
+    var titleEl = document.querySelector('title');
+    if (titleEl) {
+      new MutationObserver(brandTitle).observe(titleEl, { childList: true });
+    }
+    // Storybook can replace the <title> element itself, not just its text.
+    new MutationObserver(function () {
+      var next = document.querySelector('title');
+      if (next && next !== titleEl) {
+        titleEl = next;
+        new MutationObserver(brandTitle).observe(titleEl, { childList: true });
+        brandTitle();
+      }
+    }).observe(document.head, { childList: true });
+  })();
+</script>
+
+<!-- The manager (this document) is a separate top-level window from the
+     preview iframe (preview.css) — each needs its own font load. Source
+     Sans 3 is the real production body font (mosaicTheme.ts fontBase). -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+  /*
+    Storybook's own sidebar tree hover/focus color (#DBECFF, a generic
+    blue) is hardcoded via a CSS custom property re-declared inline on its
+    own rule (--tree-node-background-hover), not exposed through the
+    public theming API (mosaicTheme.ts) — setting the variable at :root
+    doesn't win since the closer declaration always overrides. ".sidebar-item"
+    is Storybook's own stable semantic class (unlike the emotion-hashed
+    class alongside it), so target that directly instead.
+
+    This variable isn't just the row's own background -- the per-item
+    "..." context-menu button's wrapper also reads the SAME variable for
+    its own background/box-shadow (it's meant to blend the button into
+    whatever's behind it). Overriding only the row's `background` property
+    (not the variable) left that child still resolving to Storybook's blue.
+    Override the variable itself so both consumers pick up the fix.
+  */
+  .sidebar-item:hover,
+  .sidebar-item:focus {
+    --tree-node-background-hover: rgba(187, 16, 78, 0.15) !important;
+    background: rgba(187, 16, 78, 0.15) !important;
+  }
+
+  /* Same issue on the per-item "..." context-menu button: :hover is
+     already brand-colored, but :active (mousedown) falls back to
+     Storybook's default light blue. Target by the stable aria-label
+     rather than its volatile emotion-hashed class. */
+  button[aria-label="Open context menu"]:active {
+    background: rgba(187, 16, 78, 0.3) !important;
+  }
+
+  /* Help-chat widget — see the script block below. Plain inline styles
+     (not Tailwind/tokens.mjs) on purpose: this file is injected into
+     Storybook's manager document directly, outside any build step that
+     could import shared-ui's own token modules. Hex values are copied
+     from tokens.mjs (mo-red DEFAULT / mo-white / mo-black / mo-grey-3). */
+  #mo-help-chat-launcher {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 2147483000;
+    width: 52px;
+    height: 52px;
+    border-radius: 9999px;
+    border: none;
+    background: #B82431;
+    color: #F5F4F0;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+  }
+  #mo-help-chat-launcher:hover {
+    background: #A7212D;
+  }
+  #mo-help-chat-panel {
+    position: fixed;
+    bottom: 84px;
+    right: 20px;
+    z-index: 2147483000;
+    width: 340px;
+    max-height: 480px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #DEDCD8;
+    box-shadow: 0 20px 24px -4px rgba(16, 24, 40, 0.08);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+  }
+  #mo-help-chat-panel.open {
+    display: flex;
+  }
+  #mo-help-chat-header {
+    padding: 14px 16px;
+    background: #B82431;
+    color: #F5F4F0;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #mo-help-chat-close {
+    background: none;
+    border: none;
+    color: #F5F4F0;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+  #mo-help-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #F5F4F0;
+  }
+  #mo-help-chat-messages .mo-help-chat-empty {
+    font-size: 12.5px;
+    color: #6B6A66;
+    line-height: 1.5;
+  }
+  .mo-help-chat-bubble {
+    max-width: 88%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .mo-help-chat-bubble.user {
+    align-self: flex-end;
+    background: #B82431;
+    color: #F5F4F0;
+    border-bottom-right-radius: 4px;
+  }
+  .mo-help-chat-bubble.assistant {
+    align-self: flex-start;
+    background: #ffffff;
+    color: #313030;
+    border: 1px solid #DEDCD8;
+    border-bottom-left-radius: 4px;
+  }
+  .mo-help-chat-bubble.error {
+    align-self: flex-start;
+    background: #F8E7EA;
+    color: #831822;
+    border: 1px solid #EAB6BE;
+  }
+  .mo-help-chat-bubble a {
+    color: #487FEC;
+    text-decoration: underline;
+  }
+  .mo-help-chat-bubble.user a {
+    color: inherit;
+  }
+  .mo-help-chat-bubble a.mo-help-chat-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin: 4px 4px 0 0;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #F57134;
+    color: #F5F4F0;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .mo-help-chat-bubble a.mo-help-chat-download:hover {
+    background: #DF672F;
+  }
+  .mo-help-chat-download-icon {
+    flex: none;
+  }
+  .mo-help-chat-asset-preview {
+    margin: 6px 0 4px;
+  }
+  .mo-help-chat-asset-thumb {
+    display: block;
+    max-width: 140px;
+    max-height: 90px;
+    padding: 10px;
+    border: 1px solid #DEDCD8;
+    border-radius: 8px;
+    object-fit: contain;
+    /* Genuinely transparent, not a checkerboard "transparency" indicator —
+       that design-tool convention read as visual clutter here, and the
+       assistant bubble it sits in is a fixed light background anyway, so
+       the asset's own transparency already shows through correctly. */
+    background: transparent;
+  }
+  .mo-help-chat-bubble code {
+    background: rgba(50, 47, 44, 0.08);
+    border-radius: 4px;
+    padding: 1px 4px;
+    font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .mo-help-chat-bubble pre {
+    margin: 4px 0;
+    padding: 8px;
+    background: rgba(50, 47, 44, 0.06);
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+  .mo-help-chat-bubble pre code {
+    background: none;
+    padding: 0;
+  }
+  #mo-help-chat-form {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid #DEDCD8;
+    background: #ffffff;
+  }
+  #mo-help-chat-input {
+    flex: 1;
+    border: 1px solid #DEDCD8;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: none;
+  }
+  #mo-help-chat-input:focus {
+    outline: 2px solid #528CFF;
+    outline-offset: 1px;
+  }
+  #mo-help-chat-send {
+    border: none;
+    border-radius: 8px;
+    background: #B82431;
+    color: #F5F4F0;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 14px;
+    cursor: pointer;
+  }
+  #mo-help-chat-send:disabled {
+    background: #C5C4C0;
+    cursor: default;
+  }
+</style>
+
+<button id="mo-help-chat-launcher" title="Ask about the design system" aria-label="Ask about the design system">?</button>
+<div id="mo-help-chat-panel" role="dialog" aria-label="Design system assistant">
+  <div id="mo-help-chat-header">
+    <span>Ask about the design system</span>
+    <button id="mo-help-chat-close" aria-label="Close">✕</button>
+  </div>
+  <div id="mo-help-chat-messages">
+    <div class="mo-help-chat-empty">
+      Ask me things like &ldquo;what color is mo-blue?&rdquo; or &ldquo;is there a
+      dropdown component?&rdquo; — answers are grounded in this design system, nothing
+      else.
+    </div>
+  </div>
+  <form id="mo-help-chat-form">
+    <textarea
+      id="mo-help-chat-input"
+      rows="1"
+      maxlength="2000"
+      placeholder="Ask a question…"
+    ></textarea>
+    <button id="mo-help-chat-send" type="submit">Send</button>
+  </form>
+</div>
+
+<!-- The same rasteriser the Logo and Shapes pages use, bundled to a global by
+     `npm run build:chat-download` (prestorybook/prebuild-storybook). The manager
+     document is outside Vite's module graph and cannot import the TypeScript
+     directly, and a second hand-rolled copy of "SVG to PNG at a given size" is
+     exactly the duplication this design system spends its time removing. If the
+     bundle is missing the chat degrades to a plain link at the file's own size,
+     which is what it did before custom sizes existed. -->
+<script src="/mo-svg-download.js"></script>
+
+<script>
+  (function () {
+    // Storybook's manager document is loaded once per session, so this
+    // runs exactly once — no need to guard against re-injection.
+    var ENDPOINT = /localhost|127\.0\.0\.1/.test(window.location.hostname)
+      ? 'http://localhost:3000/api/storybook-assistant/chat'
+      : 'https://dashboard.mosaic.com/api/storybook-assistant/chat';
+    var MAX_HISTORY = 12;
+
+    // A real download glyph (tray + arrow), not a plain "↓"/"⬇" character —
+    // inline SVG since this plain script has no icon library available.
+    var DOWNLOAD_ICON =
+      '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" class="mo-help-chat-download-icon" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>';
+
+    var history = [];
+    var launcher = document.getElementById('mo-help-chat-launcher');
+    var panel = document.getElementById('mo-help-chat-panel');
+    var closeBtn = document.getElementById('mo-help-chat-close');
+    var messagesEl = document.getElementById('mo-help-chat-messages');
+    var form = document.getElementById('mo-help-chat-form');
+    var input = document.getElementById('mo-help-chat-input');
+    var sendBtn = document.getElementById('mo-help-chat-send');
+
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    // Only a link the assistant is allowed to point at (see
+    // STORYBOOK_PAGE_IDS in the dashboard's context.ts) renders as a real
+    // link — anything else collapses back to plain text. This is the
+    // actual security boundary against a malicious/hallucinated href, not
+    // just a nicety.
+    function isSafeDocHref(href) {
+      return /^\/\?path=\/docs\/[a-z0-9-]+--docs$/.test(href) || /^https:\/\/[^\s"'<>]+$/.test(href);
+    }
+
+    // A real, immediately-downloadable brand asset — served unhashed from
+    // .storybook/main.ts's staticDirs (../assets -> /brand-assets), the
+    // same source Logo.stories.tsx's own download buttons use. Narrowed to
+    // exactly the mosaic-logo/mosaic-mark filenames (every brand color, SVG
+    // + PNG) rather than "anything under /brand-assets/" — the assets
+    // folder also holds icon sets that were never meant to be chat-served.
+    var ASSET_FILE = /^\/brand-assets\/mosaic-(logo|mark)(-(white|black|yellow|orange|pink|purple|green|forest|blue|ocean))?\.(svg|png)$/;
+    // The twenty page-36 shapes. They ship filled brand red; a `fill=mo-*`
+    // parameter recolours on the way out, validated against the palette the
+    // rasteriser bundle exports — never against colours retyped here.
+    var SHAPE_FILE = /^\/brand-assets\/shapes\/vector([1-9]|1[0-9]|20)\.(svg|png)$/;
+
+    function isSafeAssetHref(href) {
+      var file = href.split('?')[0];
+      if (ASSET_FILE.test(file)) return parseSize(href) !== null;
+      if (SHAPE_FILE.test(file)) return parseSize(href) !== null;
+      return false;
+    }
+
+    // An asset link may carry exactly one size: `?scale=4` or `?w=512`.
+    // Returns null for anything else, which makes the whole href unsafe rather
+    // than silently dropping the part that was not understood — the assistant
+    // writes these, and a malformed one should look wrong, not work partially.
+    //
+    // Bounds are deliberate. Scale is capped at 16 and width at 4096 because
+    // the PNG path rasterises on a canvas in the visitor's browser: the mark is
+    // 300px square, so 16x is a 4800px image, and past that a helpful request
+    // turns into a frozen tab.
+    function parseSize(href) {
+      var q = href.indexOf('?');
+      if (q === -1) return { format: null, scale: null, width: null, fill: null };
+      var out = { format: null, scale: null, width: null, fill: null };
+      var parts = href.slice(q + 1).split('&');
+      if (parts.length > 2) return null;
+      for (var i = 0; i < parts.length; i += 1) {
+        var scale = /^scale=(\d{1,2}(?:\.5)?)$/.exec(parts[i]);
+        if (scale) {
+          if (out.scale !== null || out.width !== null) return null;
+          var s = parseFloat(scale[1]);
+          if (!(s > 0 && s <= 16)) return null;
+          out.scale = s;
+          continue;
+        }
+        var width = /^w=(\d{2,4})$/.exec(parts[i]);
+        if (width) {
+          if (out.scale !== null || out.width !== null) return null;
+          var w = parseInt(width[1], 10);
+          if (!(w >= 16 && w <= 4096)) return null;
+          out.width = w;
+          continue;
+        }
+        // A fill must name a token the rasteriser bundle vouches for. When the
+        // bundle is absent the fill cannot be honoured, so the link is unsafe
+        // rather than silently the wrong colour.
+        var fill = /^fill=(mo-[a-z]+)$/.exec(parts[i]);
+        if (fill) {
+          if (out.fill !== null) return null;
+          var fills = (window.MoSvgDownload || {}).BRAND_FILLS || {};
+          if (!fills[fill[1]]) return null;
+          out.fill = fill[1];
+          continue;
+        }
+        return null;
+      }
+      return out;
+    }
+
+    // Minimal, deliberately narrow markdown renderer for assistant replies:
+    // fenced code blocks, inline code, **bold**, and [text](url) links.
+    // Everything is HTML-escaped first, so this can only ever add the four
+    // tags below — it can't be used to inject arbitrary markup.
+    // Sized downloads pending a click, keyed by the token embedded in the link.
+    // Kept out of the markup so no size or filename is ever parsed back out of
+    // the DOM — the values the generator uses are the ones parseSize validated.
+    var generatedDownloads = [];
+
+    function renderMarkdown(raw) {
+      var html = escapeHtml(raw);
+      var codeBlocks = [];
+      // One preview per distinct asset (SVG + PNG of the same logo share a
+      // base name) — a second link to the same file gets a download button
+      // without repeating the thumbnail right above it.
+      var previewedAssets = {};
+      html = html.replace(/```[a-zA-Z0-9]*\n?([\s\S]*?)```/g, function (_m, code) {
+        codeBlocks.push(code);
+        return ' CODEBLOCK' + (codeBlocks.length - 1) + ' ';
+      });
+      html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      // "* " / "- " list markers at the start of a line -> a bullet
+      // character, not a real <ul> (this renderer works line-by-line on
+      // <br>-joined text, not a block parser). Must run before **bold**/
+      // *italic* below, or the leading "*" is mistaken for an italic
+      // delimiter and eats the rest of the line.
+      html = html.replace(/^[*-] /gm, '• ');
+      html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (_m, text, href) {
+        // escapeHtml has already run, so a two-parameter href arrives with
+        // `&amp;` where the assistant wrote `&`. Validate the decoded form;
+        // keep writing the escaped one into attributes, where &amp; is the
+        // correct spelling anyway. Without this, exactly the links with both
+        // a size and a fill — the ones this feature exists for — were the
+        // ones rejected.
+        var decoded = href.replace(/&amp;/g, '&');
+        if (isSafeAssetHref(decoded)) {
+          var file = decoded.split('?')[0];
+          var size = parseSize(decoded);
+          var assetKey = file.replace(/\.(svg|png)$/, '');
+          var preview = '';
+          if (!previewedAssets[assetKey]) {
+            previewedAssets[assetKey] = true;
+            preview =
+              '<div class="mo-help-chat-asset-preview"><img src="' +
+              file +
+              '" alt="' +
+              text +
+              '" class="mo-help-chat-asset-thumb"></div>';
+          }
+
+          // Nothing to change, or no rasteriser on the page: hand over the
+          // committed file exactly as before. The browser's own download is
+          // always better than a generated one when nothing has to change.
+          var wantsWork = size && (size.scale !== null || size.width !== null || size.fill !== null);
+          if (!wantsWork || !window.MoSvgDownload || !window.MoSvgDownload.downloadAtSize) {
+            return preview + '<a href="' + file + '" download class="mo-help-chat-download">' + DOWNLOAD_ICON + text + '</a>';
+          }
+
+          // Generated on click, from the SVG, at the size and colour asked
+          // for. The href stays on the element so middle-click and "copy
+          // link" still reach a real file rather than dying on a `#`.
+          var token = 'gen' + (generatedDownloads.length);
+          generatedDownloads.push({
+            file: file,
+            format: /\.png$/.test(file) ? 'png' : 'svg',
+            scale: size.scale,
+            width: size.width,
+            fill: size.fill
+          });
+          return preview +
+            '<a href="' + file + '" data-mo-generate="' + token + '" class="mo-help-chat-download">' +
+            DOWNLOAD_ICON + text + '</a>';
+        }
+        return isSafeDocHref(href) ? '<a href="' + href + '" target="_blank" rel="noopener">' + text + '</a>' : text;
+      });
+      html = html.replace(/\n/g, '<br>');
+      html = html.replace(/ CODEBLOCK(\d+) /g, function (_m, idx) {
+        return '<pre><code>' + codeBlocks[Number(idx)] + '</code></pre>';
+      });
+      return html;
+    }
+
+    function addBubble(role, text, format) {
+      var bubble = document.createElement('div');
+      bubble.className = 'mo-help-chat-bubble ' + role;
+      if (format === 'markdown') {
+        bubble.innerHTML = renderMarkdown(text);
+      } else {
+        bubble.textContent = text;
+      }
+      messagesEl.appendChild(bubble);
+      scrollToBottom();
+      return bubble;
+    }
+
+    // One delegated listener rather than one per rendered link: bubbles are
+    // re-rendered on every reply, and per-element handlers would leak with them.
+    messagesEl.addEventListener('click', function (event) {
+      var link = event.target && event.target.closest
+        ? event.target.closest('a[data-mo-generate]')
+        : null;
+      if (!link) return;
+
+      var job = generatedDownloads[Number(link.getAttribute('data-mo-generate').slice(3))];
+      if (!job) return;
+
+      event.preventDefault();
+      if (link.dataset.moBusy === '1') return;
+      link.dataset.moBusy = '1';
+      var label = link.textContent;
+      link.textContent = 'Preparing…';
+
+      window.MoSvgDownload.downloadAtSize(
+        // Always rasterise from the vector, even when the person asked for a
+        // PNG: scaling up the committed PNG would hand them a blurry file that
+        // looks like the design system's fault.
+        job.file.replace(/\.png$/, '.svg'),
+        job.file.split('/').pop().replace(/\.(svg|png)$/, ''),
+        {
+          format: job.format,
+          scale: job.scale || undefined,
+          width: job.width || undefined,
+          // Token to hex at click time, from the bundle's own palette.
+          fill: job.fill ? window.MoSvgDownload.BRAND_FILLS[job.fill] : undefined
+        }
+      )
+        .catch(function () {
+          // Say so rather than leaving "Preparing…" forever. The committed file
+          // is still one click away at its own size.
+          addBubble(
+            'assistant',
+            'That size could not be generated in this browser. The file at its own size is still above.',
+            'text'
+          );
+        })
+        .finally(function () {
+          link.dataset.moBusy = '';
+          link.textContent = label;
+        });
+    });
+
+    launcher.addEventListener('click', function () {
+      panel.classList.add('open');
+      input.focus();
+    });
+    closeBtn.addEventListener('click', function () {
+      panel.classList.remove('open');
+    });
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      var text = input.value.trim();
+      if (!text) return;
+
+      addBubble('user', text);
+      history.push({ role: 'user', content: text });
+      if (history.length > MAX_HISTORY) {
+        history = history.slice(history.length - MAX_HISTORY);
+      }
+
+      input.value = '';
+      input.disabled = true;
+      sendBtn.disabled = true;
+      var thinkingBubble = addBubble('assistant', 'Thinking…');
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: history }),
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            if (!res.ok) {
+              throw new Error(data && data.error ? data.error : 'Request failed');
+            }
+            return data;
+          });
+        })
+        .then(function (data) {
+          thinkingBubble.innerHTML = renderMarkdown(data.reply);
+          thinkingBubble.className = 'mo-help-chat-bubble assistant';
+          history.push({ role: 'assistant', content: data.reply });
+          scrollToBottom();
+        })
+        .catch(function (err) {
+          thinkingBubble.textContent = err && err.message ? err.message : 'Something went wrong.';
+          thinkingBubble.className = 'mo-help-chat-bubble error';
+          // Don't keep a failed turn in history sent back to the model.
+          history.pop();
+        })
+        .finally(function () {
+          input.disabled = false;
+          sendBtn.disabled = false;
+          input.focus();
+          scrollToBottom();
+        });
+    });
+
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        form.requestSubmit();
+      }
+    });
+  })();
+</script>

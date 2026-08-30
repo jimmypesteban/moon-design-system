@@ -1,0 +1,107 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { breakpoints, fontFamily } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+export const BODY_FONT = fontFamily.body.join(', ');
+
+export const ROWS = Object.entries(breakpoints).map(([name, width]) => ({
+  name,
+  px: parseInt(width, 10),
+  rem: parseInt(width, 10) / 16,
+}));
+
+export const MAX = Math.max(...ROWS.map((r) => r.px));
+
+export const TYPICAL = {
+  sm: 'large phone, landscape',
+  md: 'tablet, portrait',
+  lg: 'tablet landscape, small laptop',
+  xl: 'desktop',
+  '2xl': 'wide desktop',
+};
+
+<Meta title="Foundations/Breakpoints" />
+
+<DesignSystemHeader group="Foundations" title="Breakpoints">
+  The screen widths where a page's layout changes shape — like a sidebar
+  that's always visible on desktop but collapses into a menu on phone.
+</DesignSystemHeader>
+
+## Scale
+
+Every breakpoint is **min-width**: `md:flex` means *flex from 768px upward*,
+and applies at every larger size too. So styles cascade up, and the unprefixed
+value is the phone case. There is no max-width prefix in this system — design
+the narrow layout first, then add prefixes to widen it.
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5', color: '#6B6A66', fontSize: 13, fontWeight: 500 }}>
+      <th style={{ padding: '8px 12px', width: 80 }}>Prefix</th>
+      <th style={{ padding: '8px 12px', width: 150 }}>Size (16px base)</th>
+      <th style={{ padding: '8px 12px', width: 100 }}>Min width</th>
+      <th style={{ padding: '8px 12px', width: 210 }}>Typically</th>
+      <th style={{ padding: '8px 12px' }}></th>
+    </tr>
+  </thead>
+  <tbody>
+    {ROWS.map((row) => (
+      <tr key={row.name} style={{ borderBottom: '1px solid #F3EDE7' }}>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#313030' }}>{row.name}:</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{row.rem}rem</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{row.px.toLocaleString()}px</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{TYPICAL[row.name]}</td>
+        <td style={{ padding: '6px 12px' }}>
+          <div style={{ background: '#FBE4EC', height: 18, width: `${(row.px / MAX) * 100}%`, borderRadius: 2, display: 'flex', alignItems: 'center' }}>
+            <span style={{ fontSize: 10, color: '#B82431', paddingLeft: 4, whiteSpace: 'nowrap' }}>{row.px.toLocaleString()}px</span>
+          </div>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## What actually gets used
+
+Counted across `apps/` and `packages/`, so you can tell a live breakpoint from
+a theoretical one:
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5', color: '#6B6A66', fontSize: 13, fontWeight: 500 }}>
+      <th style={{ padding: '8px 12px', width: 80 }}>Prefix</th>
+      <th style={{ padding: '8px 12px', width: 120 }}>Uses</th>
+      <th style={{ padding: '8px 12px' }}></th>
+    </tr>
+  </thead>
+  <tbody>
+    {[['sm', 1099], ['lg', 498], ['md', 358], ['xl', 123], ['2xl', 9]].map(([name, n]) => (
+      <tr key={name} style={{ borderBottom: '1px solid #F3EDE7' }}>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#313030' }}>{name}:</td>
+        <td style={{ padding: '6px 12px', fontSize: 13, color: '#6B6A66' }}>{n.toLocaleString()}</td>
+        <td style={{ padding: '6px 12px' }}>
+          <div style={{ background: '#FBE4EC', height: 18, width: `${(n / 1099) * 100}%`, borderRadius: 2 }} />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+`sm:` carries most of the responsive work and `2xl:` is close to unused — worth
+knowing before you reach for the extremes. Counts are a snapshot, not derived,
+so treat them as a rough shape rather than a live figure.
+
+## Implementation notes
+
+Mosaic UI uses Tailwind's default breakpoint scale as-is — no app has needed
+to override it at the brand-token level.
+
+A consuming app may define additional screens of its own, but those are
+**app-specific, not part of this shared base layer** — a component shared
+between two apps should step its layout only at the widths this scale names,
+or it will change shape at different points depending where it renders.
+Reach for the stock scale unless you are inside an app that defines its own
+ramp and matching it on purpose.
+
+<DocsFooter />

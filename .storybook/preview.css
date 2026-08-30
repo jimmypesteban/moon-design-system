@@ -1,0 +1,114 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+TC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap");
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* Source Serif 4 (heading) and Source Sans 3 (body) are the production
+   two-font system. Noto Serif TC/Noto Sans TC ride along as CJK fallbacks
+   (heading/body respectively) — Traditional Chinese only. Keep in sync with
+   tokens.mjs' fontFamily export by hand — CSS can't import a JS module.
+
+   Scoped into @layer base deliberately: Tailwind v4 wraps its own utilities
+   (including font-heading) in @layer utilities, and unlayered CSS always
+   wins over layered CSS regardless of specificity — a plain `body { … }`
+   rule here silently beat every `.font-heading` element site-wide (h1-h3,
+   DesignSystemHeader's title) with no visible error, just the wrong font. */
+@layer base {
+  body {
+    background: #F5F4F0;
+    font-family: 'Source Sans 3', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+  }
+}
+
+/* font-heading/font-body as plain CSS, not via Tailwind's theme.extend —
+   see the comment in tailwind.config.js for why the theme-based approach
+   doesn't work under Tailwind v4's @config compat layer for this Storybook
+   build specifically (real consuming apps resolve fontFamily fine on their
+   own separate Tailwind build).
+
+   Deliberately unlayered + !important: Storybook's own docs-page heading
+   CSS (emotion-generated, unlayered, e.g. ".css-xxxx :where(h1...)") sets
+   font-family from the manager theme's fontBase on every h1/h2/h3 by
+   default. Equal specificity either way (a plain class vs. a :where()
+   selector, which contributes zero), so it comes down to layer status —
+   unlayered always beats an explicit @layer regardless of source order or
+   specificity — and Storybook's own CSS is injected with no layer. */
+.font-heading {
+  font-family: 'Source Serif 4', 'Noto Serif TC', 'PingFang TC', 'Songti TC', Georgia, serif !important;
+}
+.font-body {
+  font-family: 'Source Sans 3', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif !important;
+}
+
+/* Plain markdown ## / ### headings on every docs page (Typography's "Font
+   families"/"Size scale", Introduction's "Getting started", etc.) aren't
+   wrapped in font-heading — they're rendered straight by Storybook's own
+   MDX theme, which defaults every heading to the same font as body text.
+   For a design-system's own docs, headings should read as headings
+   everywhere, not just on the one custom DesignSystemHeader title.
+   #storybook-docs is a stable id (unlike Storybook's own emotion-hashed
+   classes) with specificity high enough to beat Storybook's own
+   :where(h1...)-based selector — a bare `h2 { … !important }` would still
+   lose on specificity even unlayered, since :where() itself is 0-specificity
+   but the class it's paired with in Storybook's own rule isn't. */
+#storybook-docs h1,
+#storybook-docs h2,
+#storybook-docs h3,
+#storybook-docs h4,
+#storybook-docs h5,
+#storybook-docs h6 {
+  font-family: 'Source Serif 4', 'Noto Serif TC', 'PingFang TC', 'Songti TC', Georgia, serif !important;
+}
+
+/* Storybook's own docs typography reset (unlayered, e.g.
+   ".css-xxxx :where(div:not(...))") sets font-family DIRECTLY on every
+   div, not just inherited — so a Typography.mdx sample/title div with no
+   font-family of its own ignores its own card's inline value entirely
+   (direct-on-element always beats inherited-from-ancestor, whatever the
+   ancestor's value is). Each card's real per-font value lives ONLY on the
+   card's own root (Typeface section, Typography.mdx) — every descendant
+   forced to `inherit` just defers back up the chain to it, so the card
+   reads correctly at every level regardless of nesting depth. */
+.typeface-card * {
+  font-family: inherit !important;
+}
+
+/* The font-size twin of the .typeface-card rule above, and the reason it is
+   global rather than per-component: Storybook's docs CSS sets font-size
+   DIRECTLY on span, p, a, strong, em, code, div, li and table cells (e.g.
+   ".css-xxxx :where(p:not(.sb-anchor, .sb-unstyled, .sb-unstyled p))"), and a
+   matching rule always beats an inherited value. So any element inside a custom
+   docs block that does not restate its size renders at sbdocs' own instead of
+   its parent's — silently, and only on docs pages.
+
+   Measured before this rule existed: 316 such elements across all 59 docs
+   pages. The contrast checker's suggestion sentences came out at 16px inside a
+   12.5px row, the change log's titles at 16px inside a 14px row, a Typography
+   specimen at 16px inside a 22px one, and every page footer at 14px inside 13.
+   Three separate rounds of "why is this text so big" were this one cause.
+
+   Scoped to subtrees that size themselves: the descendant combinator starts at
+   an element with an inline font-size, so ordinary MDX prose — which declares
+   nothing and *should* take sbdocs' typography — is untouched. One class plus
+   one attribute selector is (0,2,0), which outweighs sbdocs' single-class
+   rules, while inline styles still win over both, so a descendant that states
+   its own size keeps it.
+
+   Headings are deliberately absent from the list. They carry their own scale
+   and should not collapse to a container's body size.
+
+   Storybook does offer .sb-unstyled as a per-element opt-out, and it works, but
+   it has to be remembered on every new block. This cannot be forgotten. */
+.sbdocs [style*="font-size"] :where(span, p, a, strong, em, code, div, li, td, th) {
+  font-size: inherit;
+}
+
+/* Storybook's own docs page theme sets a fixed 40px side padding
+   (.sbdocs-wrapper { padding: 64px 40px }) regardless of viewport — too
+   wide on mobile. Match the brand's own mobile container margin instead
+   (tokens.mjs container.margin.DEFAULT = 16px) below the sm breakpoint. */
+@media (max-width: 640px) {
+  .sbdocs-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}

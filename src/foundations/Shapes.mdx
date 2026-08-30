@@ -1,0 +1,213 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { colors, fontFamily } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+import { downloadSvg, downloadPng, SCALE_PRESETS } from '../../.storybook/svgDownload';
+
+<Meta title="Foundations/Shapes" />
+
+export const BODY = fontFamily.body.join(', ');
+export const MONO = 'ui-monospace, SFMono-Regular, Menlo, monospace';
+export const LINE = colors['mo-grey'][3];
+export const MUTED = colors['mo-grey'].DEFAULT;
+
+<DesignSystemHeader group="Foundations" title="Shapes">
+  The brand's decorative forms, all cut from the circle the Mosaic mark
+  lives on. This is an open set, not a fixed list — which is the first
+  thing to know before reaching for one.
+</DesignSystemHeader>
+
+These are decoration, not components. They fill space, mask photography and
+carry colour in a composition — a hero, an empty state, a marketing block. A
+control is never one of these; controls use the
+[radius scale](/?path=/docs/foundations-radius--docs).
+
+<div style={{ fontFamily: BODY, fontSize: 13, color: MUTED, marginTop: 8, lineHeight: 1.6 }}>
+  Twenty shapes, and the count is the unimportant part: there is no canonical
+  set. A new shape is in-brand if it reads as cut from a circle or a soft
+  geometric primitive — experiment freely.
+</div>
+
+## All twenty
+
+The real vectors, the same files consumer surfaces animate behind their
+content. Owned by the design system so apps never keep private copies.
+
+{/* Each vector carries a default brand colour below; the pairings are a
+    starting point, not a rule — any ramp colour works. */}
+
+export const ShapeScale = () => null;
+
+export const DL_BUTTON = {
+  fontSize: 11,
+  padding: '3px 9px',
+  borderRadius: 6,
+  border: `1px solid ${LINE}`,
+  background: colors['mo-grey'][1],
+  color: colors['mo-black'],
+  cursor: 'pointer',
+  fontFamily: MONO,
+};
+
+export const SHAPES = [
+  ['vector1', 'mo-yellow'], ['vector2', 'mo-red'], ['vector3', 'mo-orange'], ['vector4', 'mo-pink'],
+  ['vector5', 'mo-purple'], ['vector6', 'mo-green'], ['vector7', 'mo-blue'], ['vector8', 'mo-forest'],
+  ['vector9', 'mo-ocean'], ['vector10', 'mo-red'], ['vector11', 'mo-orange'], ['vector12', 'mo-yellow'],
+  ['vector13', 'mo-pink'], ['vector14', 'mo-forest'], ['vector15', 'mo-blue'], ['vector16', 'mo-purple'],
+  ['vector17', 'mo-red'], ['vector18', 'mo-blue'], ['vector19', 'mo-ocean'], ['vector20', 'mo-green'],
+];
+
+<div
+  style={{
+    fontFamily: BODY,
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(118px, 1fr))',
+    gap: 10,
+    marginTop: 16,
+  }}
+>
+  {SHAPES.map(([name, token]) => (
+    <div
+      key={name}
+      style={{
+        border: `1px solid ${LINE}`,
+        borderRadius: 10,
+        padding: 12,
+        background: colors['mo-grey'][1],
+        textAlign: 'center',
+      }}
+    >
+      <div style={{ height: 84, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {/* Masked, not an <img>: the files ship filled with brand red, and a
+            mask paints the shape in whatever colour the use site wants from one
+            file. This is the recolouring the note below recommends, done here. */}
+        <span
+          style={{
+            display: 'block',
+            width: 84,
+            height: 84,
+            backgroundColor: colors[token].DEFAULT,
+            maskImage: `url(/brand-assets/shapes/${name}.svg)`,
+            WebkitMaskImage: `url(/brand-assets/shapes/${name}.svg)`,
+            maskRepeat: 'no-repeat',
+            WebkitMaskRepeat: 'no-repeat',
+            maskPosition: 'center',
+            WebkitMaskPosition: 'center',
+            maskSize: 'contain',
+            WebkitMaskSize: 'contain',
+          }}
+        />
+      </div>
+      <span style={{ display: 'block', fontFamily: MONO, fontSize: 11, color: MUTED, marginTop: 8 }}>
+        {name}
+      </span>
+      <span style={{ display: 'block', fontFamily: MONO, fontSize: 10.5, color: MUTED }}>
+        {token}
+      </span>
+      {/* Downloads carry the shape's own colour, not the red it ships with —
+          the fill is rewritten on the way out, so one file serves every
+          colour the palette gives it. */}
+      <div style={{ display: 'flex', gap: 6, justifyContent: 'center', marginTop: 8 }}>
+        <button
+          type="button"
+          style={DL_BUTTON}
+          onClick={() =>
+            downloadSvg(`/brand-assets/shapes/${name}.svg`, `mosaic-${name}-${token}`, 1, colors[token].DEFAULT)
+          }
+        >
+          SVG
+        </button>
+        <button
+          type="button"
+          style={DL_BUTTON}
+          onClick={() =>
+            downloadPng(`/brand-assets/shapes/${name}.svg`, `mosaic-${name}-${token}`, 4, colors[token].DEFAULT)
+          }
+        >
+          PNG
+        </button>
+      </div>
+    </div>
+  ))}
+</div>
+
+<div style={{ fontFamily: BODY, fontSize: 13, color: MUTED, marginTop: 12, lineHeight: 1.65 }}>
+  Every file ships filled with <code style={{ fontFamily: MONO }}>#B82431</code>,
+  the brand red, because that is how they were exported — the colours above are
+  applied here, each shape carrying the colour it has on page 36. The tiles use
+  <code style={{ fontFamily: MONO }}> mask-image</code> with a
+  <code style={{ fontFamily: MONO }}> background-color</code>, which is the way
+  to recolour one: one file, any colour, no second copy. Inlining the SVG and
+  setting <code style={{ fontFamily: MONO }}>fill</code> works too. The SVG and
+  PNG buttons rewrite the fill the same way, so what downloads is the shape in
+  its own colour rather than the red on disk; PNG rasterises at 4× so it stays
+  crisp when placed.
+</div>
+
+<div style={{ fontFamily: BODY, fontSize: 13, color: MUTED, marginTop: 10, lineHeight: 1.65 }}>
+  The names are the export's, not a description. Four of these are also plain
+  CSS — a circle is <code style={{ fontFamily: MONO }}>border-radius: 50%</code>,
+  a pill is <code style={{ fontFamily: MONO }}>9999px</code> — and for those the
+  CSS is lighter than an image. Everything else needs the file.
+</div>
+
+## The rules
+
+- **Cut from the circle.** Every form on that page is the face circle
+  intersected, subtracted or repeated. That is the test for a new one.
+- **Not all of them are soft.** The four-point star and the cone have points.
+  "Rounded and organic, no sharp corners" is a fair description of most of the
+  set and a wrong description of the set — check the artwork, not a summary.
+- **One approved colour pair per composition.** Yellow↔Orange, Pink↔Purple,
+  Green↔Forest, Blue↔Ocean. Page 36 shows the whole palette because it is a
+  catalogue; a real composition picks one pair.
+- **Solid fill or a photo mask.** No gradients inside a shape, no strokes.
+- **Keep internal padding**, so the shape reads as a shape and not as a crop.
+
+## In motion
+
+Two places animate them today, and the student home is the larger:
+
+**Student home** — twenty shapes are not all on screen at once; a handful sit
+behind the content at 3–4% opacity under `mix-blend-mode: multiply`, each with
+its own duration and a negative delay so they are already mid-cycle on load.
+Five motions, all `ease-in-out infinite` except the spin:
+
+<div style={{ fontFamily: MONO, fontSize: 12.5, border: `1px solid ${LINE}`, borderRadius: 8, padding: '12px 16px', marginTop: 12, background: colors['mo-grey'][2], overflowX: 'auto' }}>
+  {[
+    '.shape-float   — 20s  drift and scale',
+    '.shape-orbit   — 24s  drift with a small rotation',
+    '.shape-drift-x — 18s  20px horizontally',
+    '.shape-drift-y — 16s  22px vertically',
+    '.shape-spin-cw — 60s  full rotation, linear',
+  ].map((line) => (
+    <span key={line} style={{ display: 'block', whiteSpace: 'nowrap', lineHeight: 1.9 }}>{line}</span>
+  ))}
+</div>
+
+**Results hero** — two circles, blurred and drifting, over a shifting gradient
+at 8s, 10s and 14s. Three durations, none a multiple of another, so the loop
+never visibly repeats. Both carry `blur-3xl`: unblurred, two drifting circles
+read as objects moving across the card rather than as atmosphere.
+
+**Both now stop under `prefers-reduced-motion`.** Neither did until recently.
+The results hero had three unguarded animations and the student home thirteen,
+so a learner who had asked their OS to reduce motion got all sixteen. The shapes
+stay — they are texture, not movement — they simply hold still.
+
+## Where this lives, and what is missing
+
+The twenty vectors live in this package, at `assets/shapes/`, and that is the
+only committed copy — consuming apps that need them in `public/` copy them from
+here at build time (a sync script on `predev`/`prebuild`, with the app copy
+gitignored) so the two sources cannot drift. Change a shape here and every app
+picks it up on its next build.
+- **The animations belong to their pages**, not to this package: the student
+  home defines its five keyframes inline and the results hero has its three in
+  `globals.css`. Nothing here can enforce either, and a third surface wanting a
+  drifting-shape background would write a fourth copy.
+- **Nothing checks any of this.** The radius guard covers controls; a decorative
+  shape is outside that scale by design and is neither checked nor checkable.
+  This page is a convention, not a guarantee — unlike most of what sits beside it.
+
+<DocsFooter />

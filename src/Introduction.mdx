@@ -1,0 +1,150 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { borderRadius, colors, fontFamily } from '../tokens.mjs';
+import { DesignSystemHeader } from '../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../.storybook/DocsFooter';
+import { FoundationsIndex, ComponentsIndex } from '../.storybook/DocsIndexSections';
+
+export const BODY_FONT = fontFamily.body.join(', ');
+
+<Meta title="Introduction" />
+
+export const FOUNDATION_BLURBS = {
+  'Tokens': 'Every named value in one searchable list',
+  'Colors': 'Every brand color, with its hex code',
+  'Typography': 'The fonts and text sizes we use',
+  'Spacing': 'How much space goes between things',
+  'Shapes': 'The organic shapes the brand decorates with',
+  'Radius': 'How rounded corners should be',
+  'Shadow': 'How much depth/elevation a card or popup has',
+  'Breakpoints': 'Where the layout changes for phone vs. desktop',
+  'Grid': 'How wide the page content is allowed to get',
+  'Page Structure': 'Which HTML element wraps each part of a page',
+  'Icons': 'Every icon available, searchable',
+};
+
+
+{/* The brand name, not the npm name. This page opens by addressing
+    "designers, PMs, or anyone who isn't writing code", and `mosaic-design-system`
+    is an install target rather than a thing they recognise. The package name
+    still appears where it is actually needed, in "Using this in code" below. */}
+<DesignSystemHeader title="Mosaic Design System">
+  This is Mosaic's **design system** — the shared set of colors, fonts,
+  buttons, cards, and every other visual piece that makes Mosaic's products
+  look and feel like one consistent brand, instead of every screen looking
+  a little different. Everything below is a real, working piece already
+  used across our apps — not a mockup or a wishlist.
+</DesignSystemHeader>
+
+## Not sure where to start? Read this first
+
+**If you're a designer, PM, or anyone who isn't writing code:**
+Click any card below — a Foundation (colors, fonts, spacing) or a
+Component (button, card, alert) — to see it live, full-size, in the
+browser. Nothing to install, nothing to run. If you're checking whether
+something is "on-brand," start with{' '}
+<a href="/?path=/docs/foundations-colors--docs" target="_top">Colors</a>{' '}
+and <a href="/?path=/docs/foundations-typography--docs" target="_top">Typography</a> — click any
+swatch to see its exact color and copy it. If you're wondering whether a
+piece of UI already exists before asking an engineer to build it from
+scratch, skim the **Components** section below — there's a good chance
+it's already here.
+
+**If you're an engineer:** skip to{' '}
+<a href="#using-this-in-code" target="_self">Using this in code</a> further down.
+
+## Foundations
+
+The basic ingredients — colors, text sizes, spacing — that every component
+below is built from.
+
+<FoundationsIndex blurbs={FOUNDATION_BLURBS} />
+
+## Components
+
+Every finished, ready-to-use piece, grouped and ordered exactly as the sidebar
+has them — so what you find here is where you will find it there.
+
+<ComponentsIndex />
+
+---
+
+## Using this in code
+
+_Everything from here down is for engineers wiring this into an app._
+
+```tsx
+import { Button, Card, Avatar } from 'mosaic-design-system';
+```
+
+### Running Storybook locally
+
+```bash
+npm install
+npm run storybook
+```
+
+Then open `http://localhost:6006`. Every component and Foundation lives in the
+sidebar on the left — click through to see its variants and props.
+
+import { SyncIcon, GridIcon, PhotoIcon, RulerIcon, OutlineIcon, GrowIcon, AccessibilityIcon } from '@storybook/icons';
+
+export const TOOLBAR_ITEMS = [
+  { Icon: SyncIcon, name: 'Reload story', desc: 'Re-mounts the story from scratch' },
+  { Icon: GridIcon, name: 'Grid', desc: 'Overlay a layout grid on the canvas' },
+  { Icon: PhotoIcon, name: 'Preview background', desc: 'Swap the canvas background between the real brand surfaces (Bone, White, Dark) — use this to check a component still reads correctly on a dark background, not just the default' },
+  { Icon: RulerIcon, name: 'Measure tool', desc: 'Click an element to see its exact pixel dimensions' },
+  { Icon: OutlineIcon, name: 'Outline tool', desc: 'Draw an outline around every element on the canvas' },
+  { Icon: GrowIcon, name: 'Viewport size', desc: "Resize the canvas to Mobile (375px) / Tablet (768px) / Desktop (1024px) — matches the brand's own sm/md/lg breakpoints, not generic device presets" },
+  { Icon: AccessibilityIcon, name: 'Vision filter', desc: 'Simulate color-blindness (protanopia, deuteranopia, etc.) directly on the canvas' },
+];
+
+### The toolbar
+
+Each story has a row of tools above the canvas — these are the actual toolbar
+icons (via `@storybook/icons`, the same set Storybook itself uses), not
+approximations:
+
+<table style={{ width: '100%', tableLayout: 'fixed', borderCollapse: 'collapse', fontFamily: BODY_FONT, fontSize: 14 }}>
+  <colgroup>
+    <col style={{ width: 56 }} />
+    <col style={{ width: 160 }} />
+    <col />
+  </colgroup>
+  <thead>
+    <tr>
+      <th style={{ textAlign: 'center', padding: '8px 12px', borderBottom: `2px solid ${colors['mo-grey'][3]}` }}>Icon</th>
+      <th style={{ textAlign: 'left', padding: '8px 12px', borderBottom: `2px solid ${colors['mo-grey'][3]}` }}>Name</th>
+      <th style={{ textAlign: 'left', padding: '8px 12px', borderBottom: `2px solid ${colors['mo-grey'][3]}` }}>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    {TOOLBAR_ITEMS.map(({ Icon, name, desc }) => (
+      <tr key={name}>
+        <td style={{ padding: '8px 12px', borderBottom: `1px solid ${colors['mo-grey'][2]}` }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Icon style={{ width: 18, height: 18 }} />
+          </div>
+        </td>
+        <td style={{ padding: '8px 12px', borderBottom: `1px solid ${colors['mo-grey'][2]}`, fontWeight: 500, whiteSpace: 'nowrap' }}>{name}</td>
+        <td style={{ padding: '8px 12px', borderBottom: `1px solid ${colors['mo-grey'][2]}`, color: colors['mo-grey'].DEFAULT }}>{desc}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+### The Accessibility panel
+
+Below the canvas, next to `Controls` / `Actions` / `Interactions`, there's an
+**Accessibility** tab. It runs a real axe-core audit on every story
+automatically — no button to press. It has two sub-tabs:
+
+- **Violations** — real issues (e.g. insufficient color contrast), each
+  expandable to the exact element and CSS selector, with a "Jump to element"
+  button that scrolls/highlights it on the canvas.
+- **Passes** — checks that already succeed, for reference.
+
+This isn't just for show — it already caught a real bug: `Avatar`'s `level`
+ribbon colors initially failed WCAG AA contrast against their white text,
+found and fixed within minutes of turning the addon on.
+
+<DocsFooter variant="full" />

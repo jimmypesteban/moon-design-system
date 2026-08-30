@@ -1,0 +1,74 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import * as Icons from '../icons';
+import { IconGallery } from './IconGallery';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+<Meta title="Foundations/Icons" />
+
+<DesignSystemHeader group="Foundations" title="Icons">
+  Every icon available in the design system — Mosaic's style is clean,
+  modern, simple line-icons, with no heavy fills or decoration. Search by
+  name below, preview it live, and export exactly the file you need.
+</DesignSystemHeader>
+
+## Sizes
+
+Three standard pixel sizes, exported as `ICON_SIZE`:
+
+<div style={{ display: 'flex', gap: 32, alignItems: 'flex-end', marginTop: 12 }}>
+  {Object.entries(Icons.ICON_SIZE).map(([name, px]) => (
+    <div key={name} style={{ textAlign: 'center' }}>
+      <Icons.Check size={px} color="#B82431" />
+      <div style={{ fontSize: 12, color: '#6B6A66', marginTop: 6 }}>{name} — {px}px</div>
+    </div>
+  ))}
+</div>
+
+## Available icons
+
+Search, resize, and adjust stroke weight or color live, then export any icon as SVG or PNG (4x scale) — same workflow as [lucide.dev/icons](https://lucide.dev/icons).
+
+<IconGallery />
+
+## Using a custom icon in code
+
+Lucide icons are components — import them from the curated set, never from
+`lucide-react` directly:
+
+```tsx
+import { Check } from 'mosaic-design-system/icons';
+
+<Check size={24} color="#B82431" />
+```
+
+The custom ones are SVGs rather than components, so they are rendered by name:
+
+```tsx
+import { CustomIcon } from 'mosaic-design-system';
+
+<CustomIcon name="bot" size={32} color="#B82431" />
+```
+
+`name` is any Custom entry in the gallery above, `size` is pixels (default 24),
+and `color` applies through `currentColor` — flags and logos that ship their own
+colours ignore it.
+
+The two are separate because a lucide icon is a typed, tree-shakeable component
+and a custom one is raw SVG markup. Reaching for the right one matters: if a
+concept is in the Custom list, use it rather than substituting a lucide icon
+that looks close.
+
+## Implementation notes
+
+Most concepts map onto **[Lucide](https://lucide.dev) icons** (the "Lucide"
+category), curated in `icons.ts` — import from `mosaic-design-system`, not
+`lucide-react` directly, so the set used across apps stays a deliberate,
+documented list in one outline style. Concepts lucide has no equivalent
+for — education-domain modes, the product bot — are **custom to Mosaic**
+(the "Custom" category): real SVG artwork in `src/customIcons.ts`, rendered
+via `<CustomIcon name="..." />`. Add to `icons.ts` when a component needs a
+lucide icon that isn't listed yet; add real artwork to `customIcons.ts`
+(don't force-fit a lucide icon) when it needs a custom one.
+
+<DocsFooter />

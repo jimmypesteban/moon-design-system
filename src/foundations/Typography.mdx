@@ -1,0 +1,143 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { fontFamily, fontSize } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+<Meta title="Foundations/Typography" />
+
+<DesignSystemHeader group="Foundations" title="Typography">
+  Mosaic pairs **Source Serif 4** (headings) with **Source Sans 3** (body) —
+  a two-font system, both open-licensed and loaded via `next/font/google`
+  in consuming apps. **Noto Serif TC** and **Noto Sans TC** ride along as
+  Traditional Chinese fallbacks, since neither Source font has any CJK
+  glyphs. Use the `font-heading` / `font-body` Tailwind classes rather than
+  hardcoding any of these stacks; both already include the Chinese
+  fallback.
+</DesignSystemHeader>
+
+export const WEIGHT_LABELS = {
+  300: 'Light',
+  400: 'Regular',
+  500: 'Medium',
+  600: 'Semibold',
+  700: 'Bold',
+};
+
+export const FONTS = [
+  {
+    name: 'Source Serif 4',
+    role: 'font-heading',
+    stack: fontFamily.heading,
+    weights: [400, 600, 700],
+    sample: 'latin',
+  },
+  {
+    name: 'Source Sans 3',
+    role: 'font-body',
+    stack: fontFamily.body,
+    weights: [400, 500, 600, 700],
+    sample: 'latin',
+  },
+  {
+    name: 'Noto Serif TC',
+    role: 'Chinese fallback — font-heading',
+    stack: ['"Noto Serif TC"', '"PingFang TC"', '"Songti TC"', 'serif'],
+    weights: [400, 700],
+    sample: 'zh',
+  },
+  {
+    name: 'Noto Sans TC',
+    role: 'Chinese fallback — font-body',
+    stack: ['"Noto Sans TC"', '"PingFang TC"', '"Microsoft JhengHei"', 'sans-serif'],
+    weights: [400, 500, 700],
+    sample: 'zh',
+  },
+];
+
+export const SIZE_ROWS = [
+  // These token names are hardcoded, so they can drift from tokens.mjs: retiring
+  // mo-heading-lg blanked this entire page until this list caught up. The lookup
+  // below is guarded for the same reason. The Size scale table further down
+  // derives from Object.entries(fontSize) and needs no such maintenance.
+  //
+  // Note comments must live INSIDE this array literal. A // comment placed above
+  // the export breaks MDX's acorn parse with "Could not parse expression".
+  { label: 'Title', token: 'mo-h3' },
+  { label: 'Subtitle', token: 'mo-h6' },
+  { label: 'Paragraph', token: 'mo-body' },
+];
+
+## Typeface
+
+Every typeface in the system, one card each — real font stack, real loaded
+weights, real size tokens. Not a mockup.
+
+<div style={{ display: 'flex', flexDirection: 'column', gap: 20, marginTop: 16 }}>
+  {FONTS.map((font) => (
+    <div key={font.name} className="typeface-card" style={{ position: 'relative', overflow: 'hidden', border: '1px solid #DEDCD8', borderRadius: 12, padding: 28, fontFamily: font.stack.join(', ') }}>
+      <div style={{ position: 'absolute', top: -10, right: 16, fontSize: 120, fontWeight: 700, color: '#313030', opacity: 0.06, lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>
+        {font.sample === 'latin' ? 'Aa' : '字'}
+      </div>
+
+      <div style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#6B6A66' }}>
+        Font name — {font.role}
+      </div>
+      <div style={{ fontSize: 40, fontWeight: 700, color: '#313030', marginTop: 4 }}>
+        {font.name}
+      </div>
+
+      <div style={{ display: 'flex', gap: 32, marginTop: 20, paddingTop: 16, borderTop: '1px solid #EDECE8' }}>
+        {SIZE_ROWS.map(({ label, token }) => (
+          <div key={label}>
+            <div style={{ fontSize: 12, fontWeight: 600, color: '#313030' }}>{label}</div>
+            <div style={{ fontSize: 12, color: '#6B6A66' }}>{(fontSize[token] || ['--'])[0]}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 40, marginTop: 20, paddingTop: 16, borderTop: '1px solid #EDECE8', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {font.weights.map((w) => (
+            <div key={w} style={{ fontWeight: w, fontSize: 15, color: '#313030' }}>
+              #{WEIGHT_LABELS[w] ?? w} {w}
+            </div>
+          ))}
+        </div>
+
+        <div style={{ flex: 1, minWidth: 260, fontSize: 22, lineHeight: 1.5, color: '#313030', wordSpacing: '0.4em' }}>
+          {font.sample === 'latin' ? (
+            <div>
+              <div>{'AaBbCcDdEeFfGgHhIiJj KkLlMmNnOoPpQqRrSsTt UuVvWwXxYyZz'}</div>
+              <div>{'0123456789 .,-’ “” !?#@'}</div>
+            </div>
+          ) : (
+            <div>學生 教師 課程 練習 一 二 三 四 五 六 七 八 九 十</div>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+## Size scale
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: fontFamily.body.join(', ') }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #E8DDD5' }}>
+      <th style={{ padding: '8px 12px' }}>Token</th>
+      <th style={{ padding: '8px 12px' }}>Size / line-height</th>
+      <th style={{ padding: '8px 12px' }}>Sample</th>
+    </tr>
+  </thead>
+  <tbody>
+    {Object.entries(fontSize).map(([name, [size, { lineHeight }]]) => (
+      <tr key={name} style={{ borderBottom: '1px solid #E8DDD5' }}>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>text-{name}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{size} / {lineHeight}</td>
+        <td style={{ padding: '8px 12px', fontSize: size, lineHeight, color: '#313030' }}>Aa</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<DocsFooter />

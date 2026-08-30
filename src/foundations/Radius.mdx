@@ -1,0 +1,90 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { borderRadius, fontFamily } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+export const BODY_FONT = fontFamily.body.join(', ');
+
+export const ROLES = {
+  'mo-sm': 'Teacher/admin surfaces — compact rounded-rect',
+  'mo-md': 'Student surfaces — softer corners',
+  'mo-lg': 'Large student surfaces, hero cards',
+  'mo-full': 'Pill shape — student-only',
+};
+
+export const USES = {
+  // Snapshot across apps/ and packages/, not derived — a rough shape, like
+  // the counts on the Breakpoints page.
+  'mo-sm': 382,
+  'mo-md': 89,
+  'mo-lg': 25,
+  'mo-full': 7,
+};
+
+export const ROWS = Object.entries(borderRadius).map(([name, value]) => ({
+  name,
+  value,
+  px: parseInt(value, 10),
+  role: ROLES[name] || '',
+  uses: USES[name] ?? 0,
+}));
+
+<Meta title="Foundations/Radius" />
+
+<DesignSystemHeader group="Foundations" title="Radius">
+  How sharp or soft a corner is — a small set of choices used on every
+  button, card, input, and popup in the system, so shapes stay consistent
+  instead of every screen rounding its corners a little differently.
+</DesignSystemHeader>
+
+This is also **the actual rule** behind the system's admin/consumer shape
+convention: admin surfaces are more rectangular, consumer surfaces are softer.
+
+<table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 16, fontFamily: BODY_FONT }}>
+  <thead>
+    <tr style={{ textAlign: 'left', borderBottom: '1px solid #DEDCD8', color: '#6B6A66', fontSize: 13, fontWeight: 500 }}>
+      <th style={{ padding: '8px 12px', width: 90 }}>Name</th>
+      <th style={{ padding: '8px 12px', width: 90 }}>Pixels</th>
+      <th style={{ padding: '8px 12px' }}>Used for</th>
+      <th style={{ padding: '8px 12px', width: 70 }}>Uses</th>
+      <th style={{ padding: '8px 12px', width: 90 }}></th>
+    </tr>
+  </thead>
+  <tbody>
+    {ROWS.map((row) => (
+      <tr key={row.name} style={{ borderBottom: '1px solid #EDECE8' }}>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#313030', fontWeight: 600 }}>{row.name}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{row.value}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{row.role}</td>
+        <td style={{ padding: '8px 12px', fontSize: 13, color: '#6B6A66' }}>{row.uses}</td>
+        <td style={{ padding: '8px 12px' }}>
+          <div style={{ width: 56, height: 56, background: '#B82431', borderRadius: row.value }} />
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+## Implementation notes
+
+Available as `rounded-mo-sm`, `rounded-mo-md`, `rounded-mo-lg` and
+`rounded-mo-full`. They are `theme.extend`, so they **add to** Tailwind's stock
+scale rather than replacing it — `rounded-lg` and `rounded-none` still work.
+
+Two things worth knowing about pills:
+
+- **`rounded-full` and `rounded-mo-full` are not the same value.** Tailwind v4
+  computes `rounded-full` as `calc(infinity * 1px)` — measured at 16,777,216px
+  — while `mo-full` is 9999px. Both fully round any realistic element, so the
+  difference is invisible in practice, but they are not interchangeable
+  literals.
+- Most pills in the component library use plain `rounded-full` (19 component files);
+  `rounded-mo-full` appears in 7 places. Either renders identically.
+
+Values derive from `tokens.mjs`, so a change there reaches this page without
+editing it — the lesson from Typography.mdx, which hardcoded a token name and
+blanked when it was retired. This page previously hardcoded `mo-sm` as 8px in
+prose and kept saying so for the whole time the token was 12px, with a 12px
+swatch rendering directly beneath the claim.
+
+<DocsFooter />

@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { boxShadow, fontFamily } from '../../tokens.mjs';
+import { DesignSystemHeader } from '../../.storybook/DesignSystemHeader';
+import { DocsFooter } from '../../.storybook/DocsFooter';
+
+export const BODY_FONT = fontFamily.body.join(', ');
+
+<Meta title="Foundations/Shadow" />
+
+<DesignSystemHeader group="Foundations" title="Shadow">
+  How much depth or "lift" something has off the page — a flat card sits
+  almost level, while a popup floating above everything else needs a bigger,
+  softer shadow to read as being on top.
+</DesignSystemHeader>
+
+export const scaleOrder = ['mo-xs', 'mo-sm', 'mo-md', 'mo-lg', 'mo-xl', 'mo-2xl', 'mo-3xl'];
+export const componentOrder = ['mo-button', 'mo-popup'];
+
+## Elevation scale
+
+<div style={{ display: 'flex', gap: 32, marginTop: 24, flexWrap: 'wrap' }}>
+  {scaleOrder.map((name) => (
+    <div key={name} style={{ textAlign: 'center', fontFamily: BODY_FONT }}>
+      <div style={{ width: 80, height: 80, background: '#FFFFFF', borderRadius: 8, boxShadow: boxShadow[name] }} />
+      <div style={{ marginTop: 12, fontSize: 13, fontWeight: 600, color: '#313030' }}>{name}</div>
+    </div>
+  ))}
+</div>
+
+## Component-specific shadows
+
+<div style={{ display: 'flex', gap: 32, marginTop: 24, flexWrap: 'wrap' }}>
+  {componentOrder.map((name) => (
+    <div key={name} style={{ textAlign: 'center', fontFamily: BODY_FONT }}>
+      <div style={{ width: 80, height: 80, background: '#FFFFFF', borderRadius: 8, boxShadow: boxShadow[name] }} />
+      <div style={{ marginTop: 12, fontSize: 13, fontWeight: 600, color: '#313030' }}>{name}</div>
+    </div>
+  ))}
+</div>
+
+## Usage
+
+- **`mo-xs` / `mo-sm`**: subtle depth for inline elements (dropdown items, small cards)
+- **`mo-md` / `mo-lg`**: standard elevated surfaces (`Card`, dropdown panels)
+- **`mo-xl` / `mo-2xl` / `mo-3xl`**: high-elevation surfaces (modals, popovers)
+- **`mo-button`**: the specific shadow used on elevated buttons in the source design system
+- **`mo-popup`**: the specific 3-layer shadow used on popups/tooltips
+
+## Implementation notes
+
+Available as Tailwind utilities: `shadow-mo-sm`, `shadow-mo-lg`, etc. Base
+color is a neutral `#101828` at varying opacity, not `mo-black` — shadows
+read as neutral depth cues rather than brand color.
+
+<DocsFooter />
