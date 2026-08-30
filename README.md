@@ -4,6 +4,10 @@ A production-grade design system for an edtech platform — tokens, a Tailwind
 preset, 40+ React components, and a fully documented Storybook with its own
 accessibility and layout test harness.
 
+**Live Storybook:** [jimmypesteban.github.io/mosaic-design-system](https://jimmypesteban.github.io/mosaic-design-system/) —
+every foundation and component below, running in the browser. Deployed from
+`main` on every push by [GitHub Actions](.github/workflows/deploy-pages.yml).
+
 **Provenance:** I designed and built this system as the design-system owner at
 an edtech company (work shown under NDA in my portfolio). This repository is a
 genericized release of that work: the architecture, components, documentation
