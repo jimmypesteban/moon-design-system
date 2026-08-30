@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { mosaicLogoBlack } from "../logos";
+import { moonLogoBlack } from "../logos";
 import { TopNav } from "./TopNav";
 
 const meta: Meta<typeof TopNav> = {
@@ -16,7 +16,7 @@ export default meta;
 type Story = StoryObj<typeof TopNav>;
 
 /**
- * The Mosaic logo (`/mosaic-logo-black.svg`) is a public-path asset each
+ * The Moon logo (`/moon-logo-black.svg`) is a public-path asset each
  * consuming app supplies from its own `/public` folder (same convention as
  * `Logo`) — a real app provides its own file at that path. Storybook shows
  * the actual logo too, via a matching file in `.storybook/public/` wired
@@ -24,7 +24,7 @@ type Story = StoryObj<typeof TopNav>;
  * show a broken-image icon.
  */
 export const LoggedOut: Story = {
-  args: { appName: "Lessons", logoSrc: mosaicLogoBlack },
+  args: { appName: "Lessons", logoSrc: moonLogoBlack },
 };
 
 export const LoggedIn: Story = {

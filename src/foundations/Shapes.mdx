@@ -12,7 +12,7 @@ export const LINE = colors['mo-grey'][3];
 export const MUTED = colors['mo-grey'].DEFAULT;
 
 <DesignSystemHeader group="Foundations" title="Shapes">
-  The brand's decorative forms, all cut from the circle the Mosaic mark
+  The brand's decorative forms, all cut from the circle the Moon mark
   lives on. This is an open set, not a fixed list — which is the first
   thing to know before reaching for one.
 </DesignSystemHeader>
@@ -112,7 +112,7 @@ export const SHAPES = [
           type="button"
           style={DL_BUTTON}
           onClick={() =>
-            downloadSvg(`/brand-assets/shapes/${name}.svg`, `mosaic-${name}-${token}`, 1, colors[token].DEFAULT)
+            downloadSvg(`/brand-assets/shapes/${name}.svg`, `moon-${name}-${token}`, 1, colors[token].DEFAULT)
           }
         >
           SVG
@@ -121,7 +121,7 @@ export const SHAPES = [
           type="button"
           style={DL_BUTTON}
           onClick={() =>
-            downloadPng(`/brand-assets/shapes/${name}.svg`, `mosaic-${name}-${token}`, 4, colors[token].DEFAULT)
+            downloadPng(`/brand-assets/shapes/${name}.svg`, `moon-${name}-${token}`, 4, colors[token].DEFAULT)
           }
         >
           PNG
@@ -133,8 +133,8 @@ export const SHAPES = [
 
 <div style={{ fontFamily: BODY, fontSize: 13, color: MUTED, marginTop: 12, lineHeight: 1.65 }}>
   Every file ships filled with <code style={{ fontFamily: MONO }}>#B82431</code>,
-  the brand red, because that is how they were exported — the colours above are
-  applied here, each shape carrying the colour it has on page 36. The tiles use
+  the brand red, because that is how they were drawn — the colours above are
+  applied here, each shape carrying its default pairing. The tiles use
   <code style={{ fontFamily: MONO }}> mask-image</code> with a
   <code style={{ fontFamily: MONO }}> background-color</code>, which is the way
   to recolour one: one file, any colour, no second copy. Inlining the SVG and

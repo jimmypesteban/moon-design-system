@@ -1,4 +1,4 @@
-// CJS entry for the preset. Without it, require('mosaic-design-system/tailwind-preset')
+// CJS entry for the preset. Without it, require('moon-design-system/tailwind-preset')
 // resolved to the .mjs and handed back the MODULE NAMESPACE — so a CJS config got
 // { default: preset }, spread it into `presets`, and every brand token silently
 // vanished from that app unless the author knew to write `.default` (trap 5 in

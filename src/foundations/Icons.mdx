@@ -7,7 +7,7 @@ import { DocsFooter } from '../../.storybook/DocsFooter';
 <Meta title="Foundations/Icons" />
 
 <DesignSystemHeader group="Foundations" title="Icons">
-  Every icon available in the design system — Mosaic's style is clean,
+  Every icon available in the design system — Moon's style is clean,
   modern, simple line-icons, with no heavy fills or decoration. Search by
   name below, preview it live, and export exactly the file you need.
 </DesignSystemHeader>
@@ -37,7 +37,7 @@ Lucide icons are components — import them from the curated set, never from
 `lucide-react` directly:
 
 ```tsx
-import { Check } from 'mosaic-design-system/icons';
+import { Check } from 'moon-design-system/icons';
 
 <Check size={24} color="#B82431" />
 ```
@@ -45,7 +45,7 @@ import { Check } from 'mosaic-design-system/icons';
 The custom ones are SVGs rather than components, so they are rendered by name:
 
 ```tsx
-import { CustomIcon } from 'mosaic-design-system';
+import { CustomIcon } from 'moon-design-system';
 
 <CustomIcon name="bot" size={32} color="#B82431" />
 ```
@@ -62,10 +62,10 @@ that looks close.
 ## Implementation notes
 
 Most concepts map onto **[Lucide](https://lucide.dev) icons** (the "Lucide"
-category), curated in `icons.ts` — import from `mosaic-design-system`, not
+category), curated in `icons.ts` — import from `moon-design-system`, not
 `lucide-react` directly, so the set used across apps stays a deliberate,
 documented list in one outline style. Concepts lucide has no equivalent
-for — education-domain modes, the product bot — are **custom to Mosaic**
+for — education-domain modes, the product bot — are **custom to Moon**
 (the "Custom" category): real SVG artwork in `src/customIcons.ts`, rendered
 via `<CustomIcon name="..." />`. Add to `icons.ts` when a component needs a
 lucide icon that isn't listed yet; add real artwork to `customIcons.ts`

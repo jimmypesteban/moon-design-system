@@ -1,7 +1,7 @@
 import { colors, fontSize, spacing, borderRadius, boxShadow, breakpoints } from './tokens.mjs';
 
 /**
- * The Mosaic brand layer as a Tailwind preset.
+ * The Moon brand layer as a Tailwind preset.
  *
  * Exists because every consuming app used to hand-copy a subset of
  * `tokens.mjs` into its own config, and a subset silently drifts. lessons
@@ -22,7 +22,7 @@ import { colors, fontSize, spacing, borderRadius, boxShadow, breakpoints } from 
  * app-local until v4 compat handles them.
  *
  * @example
- * import brandPreset from 'mosaic-design-system/tailwind-preset';
+ * import brandPreset from 'moon-design-system/tailwind-preset';
  * export default { presets: [brandPreset], content: [...], theme: { extend: {} } };
  */
 const preset = {

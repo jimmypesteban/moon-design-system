@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Preview } from '@storybook/react-vite';
-import mosaicTheme from './mosaicTheme';
+import moonTheme from './moonTheme';
 import { AutoDocsPage } from './AutoDocsPage';
 import './preview.css';
 
@@ -9,7 +9,7 @@ import './preview.css';
 // Useful for catching a component that reads fine on cream but is
 // invisible/wrong-contrast on dark (e.g. Logo's white variant, Toast,
 // Tag's fill-reverse style).
-const MOSAIC_BACKGROUNDS = {
+const MOON_BACKGROUNDS = {
   options: {
     bone: { name: 'Bone (mo-white)', value: '#F5F4F0' },
     white: { name: 'White', value: '#FFFFFF' },
@@ -22,7 +22,7 @@ const MOSAIC_BACKGROUNDS = {
 // against Tailwind's defaults) rather than generic device presets, so
 // switching viewports here means the same thing as the app's own
 // responsive breakpoints.
-const MOSAIC_VIEWPORTS = {
+const MOON_VIEWPORTS = {
   mobile: {
     name: 'Mobile (sm, 375px)',
     styles: { width: '375px', height: '812px' },
@@ -49,7 +49,7 @@ const preview: Preview = {
       },
     },
     docs: {
-      theme: mosaicTheme,
+      theme: moonTheme,
       page: AutoDocsPage,
     },
     options: {
@@ -63,9 +63,9 @@ const preview: Preview = {
       },
     },
     viewport: {
-      options: MOSAIC_VIEWPORTS,
+      options: MOON_VIEWPORTS,
     },
-    backgrounds: MOSAIC_BACKGROUNDS,
+    backgrounds: MOON_BACKGROUNDS,
     // a11y addon: flag violations in the UI but don't fail CI builds on
     // them yet — this surfaces issues for review rather than blocking
     // every story until the whole library is audited.

@@ -17,9 +17,9 @@ import { DocsIndexCard } from './DocsIndexCard';
  * steps, the breakpoint tile the real widths. Change a token and its picture
  * changes with it. Only the composition is hand-made.
  *
- * The shapes follow the brand's own graphic language (see the mosaic-brand
+ * The shapes follow the brand's own graphic language (see the moon-brand
  * skill, references/layout-and-graphics.md): circles, semicircles, quarter
- * circles, pills and arcs, derived from the Mosaic face circle. Rounded and
+ * circles, pills and arcs, derived from the Moon face circle. Rounded and
  * organic throughout — no sharp corners, no geometric polygons.
  *
  * Colour follows the brand's pairing rule, so each tile stays inside one

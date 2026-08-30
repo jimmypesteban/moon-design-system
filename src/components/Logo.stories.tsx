@@ -2,57 +2,57 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { Logo } from "./Logo";
 import {
-  mosaicLogo,
-  mosaicMark,
-  mosaicLogoSvg,
-  mosaicMarkSvg,
-  mosaicLogoWhite,
-  mosaicMarkWhite,
-  mosaicLogoWhiteSvg,
-  mosaicMarkWhiteSvg,
-  mosaicLogoBlack,
-  mosaicMarkBlack,
-  mosaicLogoBlackSvg,
-  mosaicMarkBlackSvg,
-  mosaicLogoYellow,
-  mosaicMarkYellow,
-  mosaicLogoYellowSvg,
-  mosaicMarkYellowSvg,
-  mosaicLogoOrange,
-  mosaicMarkOrange,
-  mosaicLogoOrangeSvg,
-  mosaicMarkOrangeSvg,
-  mosaicLogoPink,
-  mosaicMarkPink,
-  mosaicLogoPinkSvg,
-  mosaicMarkPinkSvg,
-  mosaicLogoPurple,
-  mosaicMarkPurple,
-  mosaicLogoPurpleSvg,
-  mosaicMarkPurpleSvg,
-  mosaicLogoGreen,
-  mosaicMarkGreen,
-  mosaicLogoGreenSvg,
-  mosaicMarkGreenSvg,
-  mosaicLogoForest,
-  mosaicMarkForest,
-  mosaicLogoForestSvg,
-  mosaicMarkForestSvg,
-  mosaicLogoBlue,
-  mosaicMarkBlue,
-  mosaicLogoBlueSvg,
-  mosaicMarkBlueSvg,
-  mosaicLogoOcean,
-  mosaicMarkOcean,
-  mosaicLogoOceanSvg,
-  mosaicMarkOceanSvg,
+  moonLogo,
+  moonMark,
+  moonLogoSvg,
+  moonMarkSvg,
+  moonLogoWhite,
+  moonMarkWhite,
+  moonLogoWhiteSvg,
+  moonMarkWhiteSvg,
+  moonLogoBlack,
+  moonMarkBlack,
+  moonLogoBlackSvg,
+  moonMarkBlackSvg,
+  moonLogoYellow,
+  moonMarkYellow,
+  moonLogoYellowSvg,
+  moonMarkYellowSvg,
+  moonLogoOrange,
+  moonMarkOrange,
+  moonLogoOrangeSvg,
+  moonMarkOrangeSvg,
+  moonLogoPink,
+  moonMarkPink,
+  moonLogoPinkSvg,
+  moonMarkPinkSvg,
+  moonLogoPurple,
+  moonMarkPurple,
+  moonLogoPurpleSvg,
+  moonMarkPurpleSvg,
+  moonLogoGreen,
+  moonMarkGreen,
+  moonLogoGreenSvg,
+  moonMarkGreenSvg,
+  moonLogoForest,
+  moonMarkForest,
+  moonLogoForestSvg,
+  moonMarkForestSvg,
+  moonLogoBlue,
+  moonMarkBlue,
+  moonLogoBlueSvg,
+  moonMarkBlueSvg,
+  moonLogoOcean,
+  moonMarkOcean,
+  moonLogoOceanSvg,
+  moonMarkOceanSvg,
 } from "../logos";
 import { borderRadius, colors, fontFamily } from "../../tokens.mjs";
 import { downloadSvg, downloadPng, SCALE_PRESETS } from "../../.storybook/svgDownload";
 
 const BODY_FONT = fontFamily.body.join(", ");
 
-// The real Mosaic wordmark/mark in all 11 color-variant lockups (Red/
+// The real Moon wordmark/mark in all 11 color-variant lockups (Red/
 // White/Black/Yellow/Orange/Pink/Purple/Green/Forest/Blue/Ocean), from
 // src/logos.ts — not placeholders. Real apps should still pass their own
 // /public asset paths (see the component doc comment for why), but these
@@ -203,17 +203,17 @@ export default meta;
 type Story = StoryObj<typeof Logo>;
 
 export const Default: Story = {
-  args: { src: mosaicLogo, width: 200, height: 46 },
+  args: { src: moonLogo, width: 200, height: 46 },
 };
 
 export const MarkOnly: Story = {
-  args: { src: mosaicMark, width: 48, height: 48 },
+  args: { src: moonMark, width: 48, height: 48 },
 };
 
 export const ResponsiveMark: Story = {
   args: {
-    src: mosaicLogo,
-    markSrc: mosaicMark,
+    src: moonLogo,
+    markSrc: moonMark,
     width: 200,
     height: 46,
     markSize: 40,
@@ -229,7 +229,7 @@ export const ColorVariants: Story = {
         {control}
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <div style={{ padding: 16, background: colors["mo-white"], borderRadius: borderRadius["mo-sm"], border: `1px solid ${colors["mo-grey"][3]}` }}>
-            <Logo src={mosaicLogo} width={172} height={40} />
+            <Logo src={moonLogo} width={172} height={40} />
             <p
               style={{
                 fontSize: 12,
@@ -241,13 +241,13 @@ export const ColorVariants: Story = {
               Red — default, on light background
             </p>
             <DownloadButtons
-              svgUrl={mosaicLogoSvg}
-              filenameBase="mosaic-logo"
+              svgUrl={moonLogoSvg}
+              filenameBase="moon-logo"
               scale={scale}
             />
           </div>
           <div style={{ padding: 16, background: colors["mo-black"], borderRadius: borderRadius["mo-sm"] }}>
-            <Logo src={mosaicLogoWhite} width={172} height={40} />
+            <Logo src={moonLogoWhite} width={172} height={40} />
             <p
               style={{
                 fontSize: 12,
@@ -259,8 +259,8 @@ export const ColorVariants: Story = {
               White — on dark backgrounds
             </p>
             <DownloadButtons
-              svgUrl={mosaicLogoWhiteSvg}
-              filenameBase="mosaic-logo-white"
+              svgUrl={moonLogoWhiteSvg}
+              filenameBase="moon-logo-white"
               scale={scale}
             />
           </div>
@@ -272,7 +272,7 @@ export const ColorVariants: Story = {
               borderRadius: borderRadius["mo-sm"],
             }}
           >
-            <Logo src={mosaicLogoBlack} width={172} height={40} />
+            <Logo src={moonLogoBlack} width={172} height={40} />
             <p
               style={{
                 fontSize: 12,
@@ -284,8 +284,8 @@ export const ColorVariants: Story = {
               Black — monochrome, on light backgrounds
             </p>
             <DownloadButtons
-              svgUrl={mosaicLogoBlackSvg}
-              filenameBase="mosaic-logo-black"
+              svgUrl={moonLogoBlackSvg}
+              filenameBase="moon-logo-black"
               scale={scale}
             />
           </div>
@@ -306,18 +306,18 @@ export const MarkColorVariants: Story = {
         {control}
         <div style={{ display: "flex", gap: 16 }}>
           <div style={{ padding: 16, background: colors["mo-white"], borderRadius: borderRadius["mo-sm"], border: `1px solid ${colors["mo-grey"][3]}` }}>
-            <Logo src={mosaicMark} width={40} height={40} />
+            <Logo src={moonMark} width={40} height={40} />
             <DownloadButtons
-              svgUrl={mosaicMarkSvg}
-              filenameBase="mosaic-mark"
+              svgUrl={moonMarkSvg}
+              filenameBase="moon-mark"
               scale={scale}
             />
           </div>
           <div style={{ padding: 16, background: colors["mo-black"], borderRadius: borderRadius["mo-sm"] }}>
-            <Logo src={mosaicMarkWhite} width={40} height={40} />
+            <Logo src={moonMarkWhite} width={40} height={40} />
             <DownloadButtons
-              svgUrl={mosaicMarkWhiteSvg}
-              filenameBase="mosaic-mark-white"
+              svgUrl={moonMarkWhiteSvg}
+              filenameBase="moon-mark-white"
               scale={scale}
             />
           </div>
@@ -329,10 +329,10 @@ export const MarkColorVariants: Story = {
               borderRadius: borderRadius["mo-sm"],
             }}
           >
-            <Logo src={mosaicMarkBlack} width={40} height={40} />
+            <Logo src={moonMarkBlack} width={40} height={40} />
             <DownloadButtons
-              svgUrl={mosaicMarkBlackSvg}
-              filenameBase="mosaic-mark-black"
+              svgUrl={moonMarkBlackSvg}
+              filenameBase="moon-mark-black"
               scale={scale}
             />
           </div>
@@ -345,59 +345,59 @@ export const MarkColorVariants: Story = {
 const ALL_SECONDARY_COLORS = [
   {
     name: "Yellow",
-    logo: mosaicLogoYellow,
-    logoSvg: mosaicLogoYellowSvg,
-    mark: mosaicMarkYellow,
-    markSvg: mosaicMarkYellowSvg,
+    logo: moonLogoYellow,
+    logoSvg: moonLogoYellowSvg,
+    mark: moonMarkYellow,
+    markSvg: moonMarkYellowSvg,
   },
   {
     name: "Orange",
-    logo: mosaicLogoOrange,
-    logoSvg: mosaicLogoOrangeSvg,
-    mark: mosaicMarkOrange,
-    markSvg: mosaicMarkOrangeSvg,
+    logo: moonLogoOrange,
+    logoSvg: moonLogoOrangeSvg,
+    mark: moonMarkOrange,
+    markSvg: moonMarkOrangeSvg,
   },
   {
     name: "Pink",
-    logo: mosaicLogoPink,
-    logoSvg: mosaicLogoPinkSvg,
-    mark: mosaicMarkPink,
-    markSvg: mosaicMarkPinkSvg,
+    logo: moonLogoPink,
+    logoSvg: moonLogoPinkSvg,
+    mark: moonMarkPink,
+    markSvg: moonMarkPinkSvg,
   },
   {
     name: "Purple",
-    logo: mosaicLogoPurple,
-    logoSvg: mosaicLogoPurpleSvg,
-    mark: mosaicMarkPurple,
-    markSvg: mosaicMarkPurpleSvg,
+    logo: moonLogoPurple,
+    logoSvg: moonLogoPurpleSvg,
+    mark: moonMarkPurple,
+    markSvg: moonMarkPurpleSvg,
   },
   {
     name: "Green",
-    logo: mosaicLogoGreen,
-    logoSvg: mosaicLogoGreenSvg,
-    mark: mosaicMarkGreen,
-    markSvg: mosaicMarkGreenSvg,
+    logo: moonLogoGreen,
+    logoSvg: moonLogoGreenSvg,
+    mark: moonMarkGreen,
+    markSvg: moonMarkGreenSvg,
   },
   {
     name: "Forest",
-    logo: mosaicLogoForest,
-    logoSvg: mosaicLogoForestSvg,
-    mark: mosaicMarkForest,
-    markSvg: mosaicMarkForestSvg,
+    logo: moonLogoForest,
+    logoSvg: moonLogoForestSvg,
+    mark: moonMarkForest,
+    markSvg: moonMarkForestSvg,
   },
   {
     name: "Blue",
-    logo: mosaicLogoBlue,
-    logoSvg: mosaicLogoBlueSvg,
-    mark: mosaicMarkBlue,
-    markSvg: mosaicMarkBlueSvg,
+    logo: moonLogoBlue,
+    logoSvg: moonLogoBlueSvg,
+    mark: moonMarkBlue,
+    markSvg: moonMarkBlueSvg,
   },
   {
     name: "Ocean",
-    logo: mosaicLogoOcean,
-    logoSvg: mosaicLogoOceanSvg,
-    mark: mosaicMarkOcean,
-    markSvg: mosaicMarkOceanSvg,
+    logo: moonLogoOcean,
+    logoSvg: moonLogoOceanSvg,
+    mark: moonMarkOcean,
+    markSvg: moonMarkOceanSvg,
   },
 ];
 
@@ -418,24 +418,24 @@ export const AllBrandColors: Story = {
           {[
             {
               name: "Red (default)",
-              logo: mosaicLogo,
-              logoSvg: mosaicLogoSvg,
-              mark: mosaicMark,
-              markSvg: mosaicMarkSvg,
+              logo: moonLogo,
+              logoSvg: moonLogoSvg,
+              mark: moonMark,
+              markSvg: moonMarkSvg,
             },
             {
               name: "White",
-              logo: mosaicLogoWhite,
-              logoSvg: mosaicLogoWhiteSvg,
-              mark: mosaicMarkWhite,
-              markSvg: mosaicMarkWhiteSvg,
+              logo: moonLogoWhite,
+              logoSvg: moonLogoWhiteSvg,
+              mark: moonMarkWhite,
+              markSvg: moonMarkWhiteSvg,
             },
             {
               name: "Black",
-              logo: mosaicLogoBlack,
-              logoSvg: mosaicLogoBlackSvg,
-              mark: mosaicMarkBlack,
-              markSvg: mosaicMarkBlackSvg,
+              logo: moonLogoBlack,
+              logoSvg: moonLogoBlackSvg,
+              mark: moonMarkBlack,
+              markSvg: moonMarkBlackSvg,
             },
             ...ALL_SECONDARY_COLORS,
           ].map(({ name, logo, logoSvg, mark, markSvg }) => {
@@ -468,7 +468,7 @@ export const AllBrandColors: Story = {
                 <DownloadButtons
                   svgUrl={logoSvg}
                   filenameBase={
-                    slug === "red" ? "mosaic-logo" : `mosaic-logo-${slug}`
+                    slug === "red" ? "moon-logo" : `moon-logo-${slug}`
                   }
                   scale={scale}
                 />
@@ -498,7 +498,7 @@ export const AllBrandColors: Story = {
                   <span style={{ marginLeft: "auto" }}>
                     <DownloadButtons
                       svgUrl={markSvg}
-                      filenameBase={slug === "red" ? "mosaic-mark" : `mosaic-mark-${slug}`}
+                      filenameBase={slug === "red" ? "moon-mark" : `moon-mark-${slug}`}
                       scale={scale}
                     />
                   </span>

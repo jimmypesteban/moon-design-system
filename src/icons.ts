@@ -1,4 +1,4 @@
-// Curated re-export of lucide-react — the approved icon set for Mosaic UI
+// Curated re-export of lucide-react — the approved icon set for Moon UI
 // (simple line-icon style, no fills).
 //
 // Import icons from here rather than 'lucide-react' directly, so the set

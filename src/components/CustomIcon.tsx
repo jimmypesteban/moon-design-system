@@ -10,7 +10,7 @@ export interface CustomIconProps {
 }
 
 /**
- * Renders one of Mosaic's custom (non-lucide) icons — real SVG artwork for
+ * Renders one of Moon's custom (non-lucide) icons — real SVG artwork for
  * concepts lucide has no equivalent for (education-domain modes, the
  * product bot, etc). See
  * `customIcons.ts` for the full list and `icons.ts` for why these are separate

@@ -22,9 +22,9 @@ interface TopNavProps {
 
 // Default logo asset path — consuming apps serve their own copy from
 // /public (.storybook/public/ holds the Storybook demo's copy).
-const MOSAIC_LOGO = '/mosaic-logo-black.svg';
+const MOON_LOGO = '/moon-logo-black.svg';
 
-export function TopNav({ appName, dashboardUrl, user, onLogout, logoSrc = MOSAIC_LOGO }: TopNavProps) {
+export function TopNav({ appName, dashboardUrl, user, onLogout, logoSrc = MOON_LOGO }: TopNavProps) {
   const defaultDashboardUrl = getDashboardUrl(dashboardUrl);
 
   return (
@@ -71,7 +71,7 @@ export function TopNav({ appName, dashboardUrl, user, onLogout, logoSrc = MOSAIC
           >
             <img
               src={logoSrc}
-              alt="Mosaic"
+              alt="Moon"
               style={{
                 height: '32px',
                 width: 'auto'

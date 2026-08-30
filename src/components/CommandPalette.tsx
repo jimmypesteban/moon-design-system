@@ -173,7 +173,7 @@ function ScrollResetOnSearch({ listRef }: { listRef: React.RefObject<HTMLDivElem
  * CommandPalette — a `Cmd/Ctrl+K`-style modal quick-search. Built on `cmdk`
  * (the same primitive behind Linear/Vercel/GitHub-style command menus):
  * fuzzy filtering, keyboard navigation, and focus trapping all come from the
- * library — this wrapper only supplies the Mosaic visual language and the
+ * library — this wrapper only supplies the Moon visual language and the
  * item layout. The caller owns `open` state, the item list, and what a
  * selection does; the palette closes itself before calling `onSelect`.
  *

@@ -216,7 +216,7 @@ async function main() {
     index = JSON.parse(await readFile(join(ROOT, 'index.json'), 'utf8'));
   } catch {
     console.error(
-      `No built Storybook at ${ROOT}. Run \`npm run build-storybook --workspace mosaic-design-system\` first.`
+      `No built Storybook at ${ROOT}. Run \`npm run build-storybook --workspace moon-design-system\` first.`
     );
     process.exit(1);
   }

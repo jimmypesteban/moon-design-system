@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 import { colors, fontSize, spacing, borderRadius, boxShadow } from './tokens.mjs';
 
-// Base Mosaic brand tokens only (skills/mosaic-brand/references/design-tokens.md,
+// Base Moon brand tokens only (skills/moon-brand/references/design-tokens.md,
 // single source of truth in ./tokens.mjs). This is the guaranteed-everywhere
 // token set the components are built against — deliberately NOT the
 // richer app-specific token layers,

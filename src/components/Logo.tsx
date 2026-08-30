@@ -17,7 +17,7 @@ export interface LogoProps {
 }
 
 /**
- * Logo — the Mosaic wordmark/brand-mark. Takes `src`/`markSrc` as props
+ * Logo — the Moon wordmark/brand-mark. Takes `src`/`markSrc` as props
  * instead of hardcoding an asset path — asset files live in each
  * consuming app's own `/public` folder (Next.js doesn't share static assets
  * across apps via node_modules), so this component only owns the shared
@@ -25,7 +25,7 @@ export interface LogoProps {
  *
  * @example
  * ```tsx
- * <Logo src="/mosaic-logo.svg" markSrc="/mosaic-mark.svg" width={140} height={32} responsiveMark />
+ * <Logo src="/moon-logo.svg" markSrc="/moon-mark.svg" width={140} height={32} responsiveMark />
  * ```
  */
 export function Logo({
@@ -37,7 +37,7 @@ export function Logo({
   priority = false,
   responsiveMark = false,
   markSize,
-  alt = 'Mosaic',
+  alt = 'Moon',
 }: LogoProps) {
   if (!responsiveMark || !markSrc) {
     return (

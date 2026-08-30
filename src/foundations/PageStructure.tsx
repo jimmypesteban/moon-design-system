@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { borderRadius, colors } from "../../tokens.mjs";
 
 /**
- * A page-structure map for Mosaic, not a generic HTML lesson.
+ * A page-structure map for Moon, not a generic HTML lesson.
  *
  * Every landmark below names the design-system component that renders it, because
  * the useful question here is not "what does <nav> mean" — it is "do I get one
@@ -609,7 +609,7 @@ export function PageStructure() {
         </pre>
       </div>
 
-      {/* ── where Mosaic actually stands ── */}
+      {/* ── where Moon actually stands ── */}
       <div
         style={{
           border: `1px solid ${LINE}`,

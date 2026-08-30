@@ -12,7 +12,7 @@ const BODY_FONT = fontFamily.body.join(', ');
 type LucideIconComponent = ComponentType<{ size?: number; strokeWidth?: number; color?: string }>;
 const LUCIDE_ICONS = Icons as unknown as Record<string, LucideIconComponent>;
 
-// One unified icon browser — lucide-backed icons and Mosaic's own custom
+// One unified icon browser — lucide-backed icons and Moon's own custom
 // (non-lucide) icons, grouped into categories under a single sticky
 // customizer (search, size, stroke, color), modeled after lucide.dev/icons'
 // and IconPark's own customizers. Click an icon to add/remove it from the
@@ -45,7 +45,7 @@ function displayName(entry: Entry) {
 }
 
 // Preset swatches — the brand ramp DEFAULTs from tokens.mjs, so the color
-// picker's quick options always match the real Mosaic palette.
+// picker's quick options always match the real Moon palette.
 const COLOR_PRESETS = [
   { name: 'black', hex: '#313030' },
   { name: 'red', hex: '#B82431' },
@@ -132,7 +132,7 @@ async function downloadAllAsZip(entries: Entry[], size: number, strokeWidth: num
   }
 
   const zipBlob = await zip.generateAsync({ type: 'blob' });
-  downloadBlob('mosaic-icons.zip', zipBlob);
+  downloadBlob('moon-icons.zip', zipBlob);
 }
 
 /** Small hover/focus info bubble for the section explanation — see it, don't wade through it. */

@@ -1,10 +1,10 @@
-# Mosaic Design System
+# Moon Design System
 
 A production-grade design system for an edtech platform — tokens, a Tailwind
 preset, 40+ React components, and a fully documented Storybook with its own
 accessibility and layout test harness.
 
-**Live Storybook:** [jimmypesteban.github.io/mosaic-design-system](https://jimmypesteban.github.io/mosaic-design-system/) —
+**Live Storybook:** [jimmypesteban.github.io/moon-design-system](https://jimmypesteban.github.io/moon-design-system/) —
 every foundation and component below, running in the browser. Deployed from
 `main` on every push by [GitHub Actions](.github/workflows/deploy-pages.yml).
 
@@ -13,7 +13,7 @@ an edtech company (work shown under NDA in my portfolio). This repository is a
 genericized release of that work: the architecture, components, documentation
 system, and test tooling are the real thing, while the brand identity —
 palette values, logo and shape artwork, product iconography, fonts story, and
-company-specific docs pages — has been replaced with an original "Mosaic"
+company-specific docs pages — has been replaced with an original "Moon"
 identity created for this repo. The replacement palette preserves the
 original's per-step perceptual lightness, so every documented contrast
 relationship still holds.

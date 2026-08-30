@@ -1,5 +1,5 @@
 import React from 'react';
-import mosaicMark from '../assets/mosaic-mark.svg';
+import moonMark from '../assets/moon-mark.svg';
 
 export interface DesignSystemHeaderProps {
   /** Breadcrumb's first segment, e.g. "Foundations" or "Components". Omit on
@@ -30,8 +30,8 @@ export function DesignSystemHeader({ group, title, children }: DesignSystemHeade
             — same fix already applied below via mb-0!. Verified via
             computed style: without the bang, this row measured 0px. */}
         <div className="mb-4! flex flex-wrap items-center gap-3">
-          <a href="/?path=/docs/introduction--docs" target="_top" aria-label="Mosaic" className="shrink-0">
-            <img src={mosaicMark} alt="" width={28} height={28} />
+          <a href="/?path=/docs/introduction--docs" target="_top" aria-label="Moon" className="shrink-0">
+            <img src={moonMark} alt="" width={28} height={28} />
           </a>
           {group && (
             <>

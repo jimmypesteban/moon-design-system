@@ -1,4 +1,4 @@
-// Single source of truth for Mosaic UI's base design tokens. Consumed by
+// Single source of truth for Moon UI's base design tokens. Consumed by
 // tailwind.config.js (theme extension) and the Storybook Foundations docs
 // pages, so the two can never drift apart.
 //
@@ -212,7 +212,7 @@ export const fontSize = {
   'mo-annotation': ['0.75rem', { lineHeight: '1rem' }], // 12px/16px = text-xs
 };
 
-// Mosaic UI uses Tailwind's default breakpoint scale as-is. Kept here anyway
+// Moon UI uses Tailwind's default breakpoint scale as-is. Kept here anyway
 // as a documented constant so JS code (e.g. a matchMedia hook) and the
 // Foundations docs page share one value instead of hardcoding pixel numbers
 // independently.

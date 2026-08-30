@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AudioPlayer } from "./AudioPlayer";
 
 // A short, freely-usable public sample so the player has something real to
-// load — not a Mosaic asset, just enough to exercise play/pause/seek.
+// load — not a Moon asset, just enough to exercise play/pause/seek.
 const SAMPLE_URL = "https://www.w3schools.com/html/horse.mp3";
 
 const meta: Meta<typeof AudioPlayer> = {

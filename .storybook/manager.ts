@@ -1,6 +1,6 @@
 import { addons } from 'storybook/manager-api';
-import mosaicTheme from './mosaicTheme';
+import moonTheme from './moonTheme';
 
 addons.setConfig({
-  theme: mosaicTheme,
+  theme: moonTheme,
 });

@@ -18,7 +18,7 @@ const config: StorybookConfig = {
   // copy to keep in sync.
   staticDirs: [
     { from: '../assets', to: '/brand-assets' },
-    // TopNav.tsx hardcodes `/mosaic-logo-black.svg` as a root-relative
+    // TopNav.tsx hardcodes `/moon-logo-black.svg` as a root-relative
     // public-path asset each consuming app is expected to supply from its
     // own /public folder — real, deliberate, not something to change here.
     // But that meant its own Storybook demo showed a broken-image icon,

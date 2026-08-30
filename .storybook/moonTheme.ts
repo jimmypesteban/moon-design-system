@@ -1,14 +1,14 @@
 import { create } from 'storybook/theming';
 // Storybook's sidebar header renders brandImage OR brandTitle, never both —
-// so the logomark + "Mosaic Design" wordmark are combined into one SVG here
-// rather than the plain brand-mark asset from ../assets/mosaic-mark.svg.
+// so the logomark + "Moon Design" wordmark are combined into one SVG here
+// rather than the plain brand-mark asset from ../assets/moon-mark.svg.
 import brandLogo from './brand-logo.svg';
 
 export default create({
   base: 'light',
-  brandTitle: 'Mosaic Design',
+  brandTitle: 'Moon Design',
   brandImage: brandLogo,
-  // Back to the Introduction, not out to mosaic.com. The mark is the only
+  // Back to the Introduction, not out to moon.com. The mark is the only
   // thing in the sidebar that looks like a way home, and sending someone to
   // the marketing site loses the design system entirely — a browser Back away,
   // but a browser Back is not what a logo in a top-left corner promises.

@@ -34,8 +34,8 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ');
 }
 
-// The Mosaic mark's four tiles, redrawn inline as loader artwork (same
-// geometry as logos.ts' mark assets) so the loader needs no asset request.
+// The Moon crescent, redrawn inline as loader artwork (same geometry as
+// logos.ts' mark assets) so the loader needs no asset request.
 
 const BLOCK_SIZE_PX: Record<LoadingStateSize, number> = { xs: 12, sm: 14, md: 18, lg: 24 };
 const BLOCK_HEIGHT_SCALE: Record<'red' | 'yellow' | 'orange', number> = { red: 0.65, yellow: 1.15, orange: 0.9 };
@@ -70,21 +70,22 @@ function LoadingBlocks({ size }: { size: LoadingStateSize }) {
 function LoadingFace({ widthPx }: { widthPx: number }) {
   return (
     <svg viewBox="0 0 48 48" width={widthPx} height={widthPx} className="animate-pulse text-mo-red" aria-hidden="true">
-      <rect x="4" y="4" width="19" height="19" rx="7" fill="currentColor" />
-      <rect x="25" y="4" width="19" height="19" rx="7" fill="currentColor" opacity="0.55" />
-      <rect x="4" y="25" width="19" height="19" rx="7" fill="currentColor" opacity="0.8" />
-      <rect x="25" y="25" width="19" height="19" rx="9.5" fill="currentColor" />
+      <path
+        d="M29.5 5.05A20 20 0 1 0 29.5 42.95A24.6 24.6 0 0 1 20.5 24A24.6 24.6 0 0 1 29.5 5.05Z"
+        fill="currentColor"
+      />
+      <circle cx="35" cy="13" r="3.2" fill="currentColor" />
     </svg>
   );
 }
 
 /**
- * LoadingState — the branded Mosaic loading family, in four contexts: a
+ * LoadingState — the branded Moon loading family, in four contexts: a
  * fullscreen route loader, a panel-sized in-content loader, a compact
  * inline loader (e.g. next to a heading while a section refreshes), and an
  * in-button label. Reconciles the pattern several apps had already
  * standardized independently (see e.g. the consumer app's
- * `MosaicLoadingScreen.tsx`) into one shared component, using the same real
+ * `MoonLoadingScreen.tsx`) into one shared component, using the same real
  * mascot face artwork as `Logo`'s mark, animated with Tailwind's stock
  * `animate-bounce`/`animate-pulse` rather than a custom keyframe set (same
  * convention as `Spinner`/`Skeleton`).

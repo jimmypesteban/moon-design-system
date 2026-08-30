@@ -1,4 +1,4 @@
-// Mosaic custom icons — concepts the product needs that have no generic
+// Moon custom icons — concepts the product needs that have no generic
 // lucide equivalent (see icons.ts for why the two sets are separate). Each
 // SVG uses `currentColor` so it can be sized and recolored the same way as
 // a lucide icon via the <CustomIcon> component.

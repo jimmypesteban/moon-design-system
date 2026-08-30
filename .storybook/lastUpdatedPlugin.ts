@@ -42,7 +42,7 @@ export interface LastUpdated {
  * to report. Nobody reads *that* build's output — it exists to fail the gate,
  * not to be served.
  *
- * The published site is a separate build: the `mosaic-ui-storybook` static
+ * The published site is a separate build: the `moon-ui-storybook` static
  * service in render.yaml, deployed from `main` on any change under
  * this repo, and served as a static Storybook build with no
  * access gate. If the footer's date is missing there, that clone is shallow too

@@ -44,7 +44,7 @@ export const COMPONENT_BLURBS: Record<string, string> = {
   ProgressBar: 'A horizontal bar that fills up to show how much of something is done.',
   Skeleton: 'A gray placeholder shape shown while real content is still loading, so the page doesn\'t look empty or broken.',
   Spinner: 'A small spinning icon shown while something is loading, when there\'s nothing else useful to show yet.',
-  LoadingState: 'The branded Mosaic loading animation (mascot face + colored blocks) — for a full page, an in-page panel, an inline "Saving…" label, or inside a button.',
+  LoadingState: 'The branded Moon loading animation (mascot face + colored blocks) — for a full page, an in-page panel, an inline "Saving…" label, or inside a button.',
   EmptyState: 'The "nothing here yet" screen — an icon, a title, an optional description, and an optional button, for whenever a list or page has no content to show.',
   NotificationBell: 'A bell icon with an unread-count badge that opens a popover list of notifications.',
   Steps: 'A row of numbered steps showing progress through a multi-step process, like a checkout or setup wizard.',
@@ -58,8 +58,8 @@ export const COMPONENT_BLURBS: Record<string, string> = {
   Divider: 'A thin line (with an optional label) used to visually separate two sections of content.',
 
   // Brand
-  Logo: 'The real Mosaic wordmark and mark, in every brand color, ready to view and download as SVG or PNG.',
-  CustomIcon: 'Renders one of Mosaic\'s custom, non-Lucide icons (mascot, language flags, education-specific icons) by name.',
+  Logo: 'The real Moon wordmark and mark, in every brand color, ready to view and download as SVG or PNG.',
+  CustomIcon: 'Renders one of Moon\'s custom, non-Lucide icons (mascot, language flags, education-specific icons) by name.',
 
   // Navigation & Shell
   // Said "sidebar plus main content area" for a component that has no

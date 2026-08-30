@@ -59,11 +59,11 @@ export const CustomIconWithLabel: Story = {
 // FloatingActionButton's `icon` prop, which would draw a second circle
 // behind them and shrink the artwork.
 //
-// To use one of these in an app, import it from `mosaic-design-system` and
+// To use one of these in an app, import it from `moon-design-system` and
 // render it as a plain <img> — no extra download step, the bundler resolves
 // it to a real static asset URL at build time, same as the Logo PNGs:
 //
-//   import { fabIconGoals } from 'mosaic-design-system';
+//   import { fabIconGoals } from 'moon-design-system';
 //   <img src={fabIconGoals} alt="" />
 //
 // Available names: fabIconDoubleXp, fabIconWorldQuiz, fabIconGames,

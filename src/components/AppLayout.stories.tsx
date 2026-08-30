@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { mosaicLogoBlack } from "../logos";
+import { moonLogoBlack } from "../logos";
 import { AppLayout } from "./AppLayout";
 
 const meta: Meta<typeof AppLayout> = {
@@ -23,7 +23,7 @@ type Story = StoryObj<typeof AppLayout>;
 export const Default: Story = {
   args: {
     appName: "Lessons",
-    logoSrc: mosaicLogoBlack,
+    logoSrc: moonLogoBlack,
     user: { name: "Alex Rivera", email: "alex@example.com" },
     onLogout: () => alert("Logout clicked"),
     children: (
