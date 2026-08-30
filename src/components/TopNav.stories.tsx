@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { mosaicLogoBlack } from "../logos";
 import { TopNav } from "./TopNav";
 
 const meta: Meta<typeof TopNav> = {
@@ -23,7 +24,7 @@ type Story = StoryObj<typeof TopNav>;
  * show a broken-image icon.
  */
 export const LoggedOut: Story = {
-  args: { appName: "Lessons" },
+  args: { appName: "Lessons", logoSrc: mosaicLogoBlack },
 };
 
 export const LoggedIn: Story = {

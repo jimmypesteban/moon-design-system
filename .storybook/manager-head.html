@@ -6,7 +6,7 @@
      Served under its own name rather than favicon.svg: Storybook ships a
      favicon.svg of its own and wins that collision, so the staticDir copy
      never reached the browser. A distinct filename sidesteps the fight. -->
-<link rel="icon" type="image/svg+xml" href="/mosaic-favicon.svg" />
+<link rel="icon" type="image/svg+xml" href="./mosaic-favicon.svg" />
 
 <!-- The tab reads "… ⋅ Storybook" by default, which is the same problem as the
      favicon one layer up: the tool's name where the brand's belongs. Storybook
@@ -314,15 +314,17 @@
      exactly the duplication this design system spends its time removing. If the
      bundle is missing the chat degrades to a plain link at the file's own size,
      which is what it did before custom sizes existed. -->
-<script src="/mo-svg-download.js"></script>
+<script src="./mo-svg-download.js"></script>
 
 <script>
   (function () {
     // Storybook's manager document is loaded once per session, so this
     // runs exactly once — no need to guard against re-injection.
+    // The assistant needs its backend; static deploys run without one, and
+    // the chat says so instead of failing a fetch against nothing.
     var ENDPOINT = /localhost|127\.0\.0\.1/.test(window.location.hostname)
       ? 'http://localhost:3000/api/storybook-assistant/chat'
-      : 'https://dashboard.mosaic.com/api/storybook-assistant/chat';
+      : null;
     var MAX_HISTORY = 12;
 
     // A real download glyph (tray + arrow), not a plain "↓"/"⬇" character —
@@ -582,6 +584,17 @@
       event.preventDefault();
       var text = input.value.trim();
       if (!text) return;
+
+      if (!ENDPOINT) {
+        addBubble('user', text);
+        input.value = '';
+        addBubble(
+          'assistant',
+          'This public build runs without the assistant backend, so I cannot answer live here. Everything I would quote — every color, size, and component — is on the Foundations and Components pages in the sidebar.'
+        );
+        scrollToBottom();
+        return;
+      }
 
       addBubble('user', text);
       history.push({ role: 'user', content: text });

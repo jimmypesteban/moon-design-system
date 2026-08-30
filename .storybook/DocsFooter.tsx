@@ -1,4 +1,5 @@
 import React from 'react';
+import mosaicMark from '../assets/mosaic-mark.svg';
 import { lastUpdated } from 'virtual:mo-last-updated';
 import { colors } from '../tokens.mjs';
 
@@ -64,7 +65,7 @@ export function DocsFooter({ variant = 'compact' }: { variant?: 'full' | 'compac
         target="_top"
         style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0, textDecoration: 'none' }}
       >
-        <img src="/brand-assets/mosaic-mark.svg" alt="" width={variant === 'full' ? 28 : 22} height={variant === 'full' ? 28 : 22} style={{ flex: 'none' }} />
+        <img src={mosaicMark} alt="" width={variant === 'full' ? 28 : 22} height={variant === 'full' ? 28 : 22} style={{ flex: 'none' }} />
         <span style={{ fontWeight: 600, color: colors['mo-black'], fontSize: variant === 'full' ? 14 : 13 }}>Mosaic Design System</span>
       </a>
       <div style={{ minWidth: 0, textAlign: 'right', flex: '1 1 260px' }}>

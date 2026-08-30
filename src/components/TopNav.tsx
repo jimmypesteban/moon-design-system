@@ -14,13 +14,17 @@ interface TopNavProps {
     email: string;
   } | null;
   onLogout?: () => void;
+  /** Logo asset for the top-left slot. Defaults to the root-relative public
+   * path consuming apps serve; Storybook passes a bundled import so the
+   * demo works when the site is hosted under a subpath. */
+  logoSrc?: string;
 }
 
 // Default logo asset path — consuming apps serve their own copy from
 // /public (.storybook/public/ holds the Storybook demo's copy).
 const MOSAIC_LOGO = '/mosaic-logo-black.svg';
 
-export function TopNav({ appName, dashboardUrl, user, onLogout }: TopNavProps) {
+export function TopNav({ appName, dashboardUrl, user, onLogout, logoSrc = MOSAIC_LOGO }: TopNavProps) {
   const defaultDashboardUrl = getDashboardUrl(dashboardUrl);
 
   return (
@@ -66,7 +70,7 @@ export function TopNav({ appName, dashboardUrl, user, onLogout }: TopNavProps) {
             onMouseLeave={(e) => e.currentTarget.style.color = '#1f2937'}
           >
             <img
-              src={MOSAIC_LOGO}
+              src={logoSrc}
               alt="Mosaic"
               style={{
                 height: '32px',

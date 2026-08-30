@@ -12,9 +12,11 @@ interface AppLayoutProps {
     email: string;
   } | null;
   onLogout?: () => void;
+  /** Forwarded to TopNav — see its doc for why Storybook passes this. */
+  logoSrc?: string;
 }
 
-export function AppLayout({ appName, dashboardUrl, children, user, onLogout }: AppLayoutProps) {
+export function AppLayout({ appName, dashboardUrl, children, user, onLogout, logoSrc }: AppLayoutProps) {
   return (
     <>
       <TopNav
@@ -22,6 +24,7 @@ export function AppLayout({ appName, dashboardUrl, children, user, onLogout }: A
         dashboardUrl={dashboardUrl}
         user={user}
         onLogout={onLogout}
+        logoSrc={logoSrc}
       />
       {/* `id` so a skip link has somewhere to land. Without a target, a skip
           link is decoration. */}
