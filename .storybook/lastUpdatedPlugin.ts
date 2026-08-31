@@ -25,6 +25,14 @@ export interface LastUpdated {
   author: string | null;
   /** Recent changes to components and tokens, newest first. */
   changes: Change[];
+  /**
+   * True when this build could only see a slice of history and could not
+   * deepen it. A depth-1 clone makes every file look introduced by the latest
+   * commit — the deployed site once showed "Accordion, Alert and 48 more
+   * added" credited to whatever PR merged last. When this is set, the page
+   * must decline to render the log rather than render that.
+   */
+  historyTruncated: boolean;
 }
 
 /**
@@ -35,19 +43,15 @@ export interface LastUpdated {
  * per request — the value cannot change mid-build, and shelling out per module
  * would be a needless cost on a package with sixty docs pages.
  *
- * Returns nulls rather than guessing when git cannot answer. That is not
- * defensive padding: the CI job that builds Storybook checks out with
- * `fetch-depth: 1` (see .github/workflows/agent-gate.yml — only the Inngest
- * task asks for full history), so in that build `git log` genuinely has nothing
- * to report. Nobody reads *that* build's output — it exists to fail the gate,
- * not to be served.
+ * Returns nulls rather than guessing when git cannot answer — a CI job that
+ * checks out shallow genuinely has nothing to report, and a footer that
+ * invents a date would be worse than one that omits it (a build that dies
+ * over a footer would be worse still).
  *
- * The published site is a separate build: the `moon-ui-storybook` static
- * service in render.yaml, deployed from `main` on any change under
- * this repo, and served as a static Storybook build with no
- * access gate. If the footer's date is missing there, that clone is shallow too
- * — a footer that invents a date would be worse than one that omits it, and a
- * build that dies over a footer would be worse still.
+ * The published site is built by .github/workflows/deploy-pages.yml, which
+ * checks out with `fetch-depth: 0` precisely so this change log has real
+ * history to read; the deepen-or-decline path below is the safety net for
+ * any build that doesn't.
  */
 /**
  * The commit subject as a readable sentence: conventional-commit prefix removed
@@ -254,23 +258,79 @@ export function lastUpdatedPlugin(packageDir: string): Plugin {
     }
   };
 
-  const read = () => {
+  /**
+   * Whether this checkout's history can be trusted, deepening it if not.
+   *
+   * Deploy hosts (and most CI) clone shallow. At depth 1, `git log --name-status`
+   * reports every file as introduced by the sole visible commit, and the
+   * deployed Changes Log showed exactly that: one row, "Accordion, Alert and
+   * 48 more added", credited to whichever PR merged last — a fabricated
+   * history on the page whose caption says it cannot go stale. A shallow
+   * checkout is asked to deepen in place (the remote and its credentials are
+   * still attached during a deploy build); if that fails, the caller must
+   * refuse to render the log rather than render the fabrication.
+   *
+   * MO_SIMULATE_SHALLOW_HISTORY=1 forces the truncated outcome so the page's
+   * refusal state can be seen and verified without manufacturing a shallow
+   * clone — the same prove-the-red-path lever the sweeps use.
+   */
+  const historyIsTruncated = (): boolean => {
+    if (process.env.MO_SIMULATE_SHALLOW_HISTORY === '1') return true;
+    const shallow = () => {
+      try {
+        return git(['rev-parse', '--is-shallow-repository']).trim() === 'true';
+      } catch {
+        return false; // Pre-2.15 git or not a repo; the outer catch covers those.
+      }
+    };
+    if (!shallow()) return false;
+    for (const attempt of [
+      ['fetch', '--deepen=2000', '--quiet'],
+      // Some hosts reject --deepen on their clone shape but honour a plain
+      // unshallow; costs one extra try only when the first failed anyway.
+      ['fetch', '--unshallow', '--quiet'],
+    ]) {
+      try {
+        git(attempt);
+        break;
+      } catch (err) {
+        // Into the BUILD log on purpose: prod rendered the refusal card and
+        // the person who can fix the deploy cannot see this process — the
+        // build log is the only channel that reaches them. One line, the
+        // command and git's own reason.
+        console.warn(
+          `[mo-last-updated] git ${attempt.join(' ')} failed: ` +
+            `${String((err as { stderr?: string }).stderr ?? err).split('\n').filter(Boolean).slice(-1)[0]}`
+        );
+      }
+    }
+    return shallow();
+  };
+
+  const read = (): LastUpdated => {
+    const historyTruncated = historyIsTruncated();
     try {
       const raw = execFileSync(
         'git',
         ['log', '-1', '--format=%aI\t%an', '--', resolve(packageDir)],
         { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], cwd: packageDir }
       ).trim();
-      if (!raw) return { date: null, author: null, changes: readChanges() };
+      // A truncated history still names its last commit truthfully — only the
+      // change list would be an invention, so only it is withheld.
+      const changes = historyTruncated ? [] : readChanges();
+      if (!raw) return { date: null, author: null, changes, historyTruncated };
       // Tab-delimited, and split on the first tab only. A space delimiter
       // turned "Jimmy Posadas Esteban" into "Jimmy", because the author name
       // very often contains spaces.
       const gap = raw.indexOf('\t');
-      if (gap === -1) return { date: raw, author: null };
+      // This branch used to return without `changes` at all — a malformed
+      // payload nobody had hit because %aI\t%an always contains a tab.
+      if (gap === -1) return { date: raw, author: null, changes, historyTruncated };
       return {
         date: raw.slice(0, gap),
         author: raw.slice(gap + 1) || null,
-        changes: readChanges(),
+        changes,
+        historyTruncated,
       };
     } catch (err) {
       // No git, not a repo, or a shallow clone with nothing to report. Say so
@@ -280,7 +340,7 @@ export function lastUpdatedPlugin(packageDir: string): Plugin {
         `[mo-last-updated] git could not report a last commit, so the docs footer ` +
           `will omit its date: ${String(err).split('\n')[0]}`
       );
-      return { date: null, author: null, changes: [] };
+      return { date: null, author: null, changes: [], historyTruncated };
     }
   };
 

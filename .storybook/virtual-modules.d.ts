@@ -10,6 +10,7 @@ declare module 'virtual:mo-last-updated' {
       why: string;
       parts: { kind: 'added' | 'removed' | 'updated'; label: string }[];
     }[];
+    historyTruncated: boolean;
   };
 }
 
